@@ -1,0 +1,81 @@
+PROMETHEUS
+    In Greek mythology, Prometheus (/prəˈmiːθiːəs/; Greek: Προμηθεύς,
+    pronounced [promɛːtʰeús], which might mean "foresight") is a Titan, culture
+    hero, and trickster figure who is credited with the creation of man from
+    clay, and who defies the gods and gives fire to humanity, an act that
+    enabled progress and civilization. Prometheus is known for his intelligence
+    and as a champion of mankind.[1]
+
+    In the Western classical tradition, Prometheus became a figure who
+    represented human striving, particularly the quest for scientific
+    knowledge, and the risk of overreaching or unintended consequences. In
+    particular, he was regarded in the Romantic era as embodying the lone
+    genius whose efforts to improve human existence could also result in
+    tragedy: Mary Shelley, for instance, gave The Modern Prometheus as the
+    subtitle to her novel Frankenstein (1818).
+
+    source: http://en.wikipedia.org/wiki/Prometheus
+
+INTRODUCTION
+    The aim of this project is to provide a general toolkit in the C language.
+    This toolkit provides several abstract data types (ADT's) with a number of
+    different implementations that guarantee different run-time complexities.
+    By providing a collection of standard libraries and different
+    implementations the programmer is given both the opportunity to fine-tune
+    application in which the data type is being used and the ability to easily
+    change such behavior easily.
+
+    The rationale behind this project is to provide to C programmers a well
+    tested easy to use toolkit that can handle data of any type. When
+    developing software in the C language there seems to be a complete lack of
+    reliable and easy to use data structures to facilitate programming. Java
+    has the JDK, C++ has the standard template library, but C has none abiding
+    by the "roll your own" mentality. This lack of generic data structures
+    often takes up a large portion of development time. This project grew as an
+    attempt to close that gap, and provide reliable, well documented, and easy
+    to use programming toolkit.
+
+OVERVIEW
+    In order to correctly and safely handle data when using the data types, all
+    of the data structures manipulate data through attributes. The attributes
+    package the behavior of the data to be stored in the data structure. The
+    attributes tells the data structure how to:
+       - copy
+       - free
+       - print
+       - compare
+       - hash
+    
+    There are a number of abstract data types provided by the toolkit, each
+    with different implementations guaranteeing different run-time complexity,
+    without changing the data types behavior. The following abstract data types
+    are provided:
+        - stack
+        - queue
+        - dequeue
+        - list
+        - hash table
+        - priority queue
+        - tree
+        - graph
+        - set
+
+    All errors are reported through the error library provided. Much like
+    errorno, a global variable is defined in error.h and will be changed upon
+    encountering an error with the appropriate error code.
+
+ABSTRACT DATA TYPES
+    - stack
+    - queue
+    - dequeue
+    - list
+    - hash table
+    - priority queue
+    - tree
+    - graph
+    - set
+OTHER
+    - error
+    - attributes
+    - math
+    - socket
