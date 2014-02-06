@@ -40,21 +40,21 @@ static char * error_name( error_t error )
     case ERROR_NO_ERROR:
         return error_names[ ERROR_NO_ERROR ];
     case ERROR_MEMORY_ALLOCATION_FAILED:
-        return error_names[ ERROR_MEMORY_ALLOCATION_FAILED - 1 ];
+        return error_names[ ERROR_MEMORY_ALLOCATION_FAILED ];
     case ERROR_NULL_PARAMETER:
-        return error_names[ ERROR_NULL_PARAMETER - 1 ];
+        return error_names[ ERROR_NULL_PARAMETER ];
     case ERROR_NOT_FOUND:
-        return error_names[ ERROR_NOT_FOUND - 1 ];
+        return error_names[ ERROR_NOT_FOUND ];
     case ERROR_INVALID_CAPACITY:
-        return error_names[ ERROR_INVALID_CAPACITY - 1 ];
+        return error_names[ ERROR_INVALID_CAPACITY ];
     case ERROR_NOT_IMPLEMENTED:
-        return error_names[ ERROR_NOT_IMPLEMENTED - 1 ];
+        return error_names[ ERROR_NOT_IMPLEMENTED ];
     case ERROR_OVERFLOW:
-        return error_names[ ERROR_OVERFLOW - 1 ];
+        return error_names[ ERROR_OVERFLOW ];
     case ERROR_UNDERFLOW:
-        return error_names[ ERROR_UNDERFLOW - 1 ];
+        return error_names[ ERROR_UNDERFLOW ];
     default:
-        return error_names[ ERROR_UNKNOWN - 1 ];
+        return error_names[ ERROR_UNKNOWN ];
     }
 }
 
