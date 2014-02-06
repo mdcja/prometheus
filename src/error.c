@@ -74,7 +74,7 @@ int error_print( const char * msg )
     int nchr = 0;
 
 #ifndef NERROR
-    nchr += fprintf( stderr, "ERROR: (%d) %s\n", error_code, msg );
+    nchr += fprintf( stderr, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 #ifdef VERBOSE
     nchr += fprintf( stderr, " - %s\n", error_name( error_code ) );
     nchr += fprintf( stderr, " - error code = %d\n", error_code );
@@ -90,7 +90,7 @@ int error_print_message( FILE * fp, char * msg )
 {
     int nchr = 0;
 #ifndef NERROR
-    nchr += fprintf( fp, "ERROR: %s\n", msg );
+    nchr += fprintf( fp, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 #ifdef VERBOSE 
     nchr += fprintf( fp, " - %s\n", error_name( error_code ) );
     nchr += fprintf( fp, " - error code = %d\n", error_code );

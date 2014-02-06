@@ -98,46 +98,57 @@ START_TEST( test_error_print )
     /* test no error */
     error_code = ERROR_NO_ERROR;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown */
     error_code = ERROR_UNKNOWN;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test memory allocation failed */
     error_code = ERROR_MEMORY_ALLOCATION_FAILED;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test null parameter */
     error_code = ERROR_NULL_PARAMETER;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test not found */
     error_code = ERROR_NOT_FOUND;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test invalid capacity */
     error_code = ERROR_INVALID_CAPACITY;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test not implemented */
     error_code = ERROR_NOT_IMPLEMENTED;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test overflow */
     error_code = ERROR_OVERFLOW;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test underflow */
     error_code = ERROR_UNDERFLOW;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown error code < 0 */
     error_code = -10;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown error code > 10 */
     error_code = 10;
     nchr = error_print( NULL );
+    ck_assert( nchr > 0 );
 }
 END_TEST
 
@@ -156,46 +167,57 @@ START_TEST( test_error_print_message )
     /* test no error */
     error_code = ERROR_NO_ERROR;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown */
     error_code = ERROR_UNKNOWN;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test memory allocation failed */
     error_code = ERROR_MEMORY_ALLOCATION_FAILED;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test null parameter */
     error_code = ERROR_NULL_PARAMETER;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test not found */
     error_code = ERROR_NOT_FOUND;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test invalid capacity */
     error_code = ERROR_INVALID_CAPACITY;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test not implemented */
     error_code = ERROR_NOT_IMPLEMENTED;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test overflow */
     error_code = ERROR_OVERFLOW;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test underflow */
     error_code = ERROR_UNDERFLOW;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown error code < 0 */
     error_code = -10;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 
     /* test unknown error code > 10 */
     error_code = 10;
     nchr = error_print_message( fp, NULL );
+    ck_assert( nchr > 0 );
 }
 END_TEST
 
