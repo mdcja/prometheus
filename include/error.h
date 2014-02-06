@@ -17,6 +17,7 @@
  * The types of errors that may occur
  */
 typedef enum _errors {
+    ERROR_NO_ERROR = 0,
     ERROR_UNKNOWN = 1,
     ERROR_MEMORY_ALLOCATION_FAILED,
     ERROR_NULL_PARAMETER,
@@ -30,10 +31,17 @@ typedef enum _errors {
 /**
  * The global error code that is used to get error code from
  *
- * @warning error code is not initialized automatically. This value is tracked
- * by the programmer.
+ * @warning error code is not initialized automatically.
  */
 error_t error_code;
+
+/**
+ * Get error message
+ *
+ * @param error_code the error number.
+ * @return a null terminated string containing the error message.
+ */
+char * error_get_message( int error );
 
 /**
  * Print an error message.
@@ -47,6 +55,7 @@ int error_print( const char * msg );
 /**
  * Print an error message to a stream.
  *
+ * @post Error message is printed to fp.
  * @param fp a stream to print message to.
  * @param msg a message to print.
  * @return the number of characters printed to stream return -1 on error.

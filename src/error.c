@@ -24,6 +24,7 @@
 static char * error_name( error_t error )
 {
     static char * error_names[ MAX_STRLEN ] = {
+        "no error",
         "unknown",
         "memory allocation failed",
         "null parameter",
@@ -36,6 +37,8 @@ static char * error_name( error_t error )
         
     switch( error )
     {
+    case ERROR_NO_ERROR:
+        return error_names[ ERROR_NO_ERROR ];
     case ERROR_MEMORY_ALLOCATION_FAILED:
         return error_names[ ERROR_MEMORY_ALLOCATION_FAILED - 1 ];
     case ERROR_NULL_PARAMETER:
@@ -53,6 +56,14 @@ static char * error_name( error_t error )
     default:
         return error_names[ ERROR_UNKNOWN - 1 ];
     }
+}
+
+/**
+ * Get error message
+ */
+inline char * error_get_message( int error )
+{
+    return error_name( error );
 }
 
 /**
