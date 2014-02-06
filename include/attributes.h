@@ -1,24 +1,13 @@
 /**
+ * This file provides data attributes.
+ *
  * @brief Provides data attributes.
  * @author Julian Martinez del Campo
- * @license This software is released under the GNU GPL 3 license (or later licenses)
- *
- * This file provides data attributes.
+ * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * The data attributes are used to manipulate the data stored in the abstract
  * data types. By changing the attributes, data can be dealt with in a more
  * controlled way; i.e. printing or copying a string.
- *
- * Errors are indicated by the functions return values, error_code will be set
- * by the functions on error (see error.h). Void functions can also experience
- * errors, in this case it is necessary to check the value contained in
- * error_code.
- *
- * If NERROR macro is defined, then error messages will not be printed to
- * stderr.
- *
- * If NDEBUG macro is defined then the queue will handle errors without
- * aborting program execution.
  */
 #ifndef _ATTRIBUTES_H_
 #define _ATTRIBUTES_H_
@@ -31,7 +20,7 @@
  * This structure holds the attributes that are commonly used when dealing with
  * data.
  */
-struct _data_attributes {
+struct _data_attributes_type {
     int (*compare)( const void *, const void * );
     int (*print)( const void *, FILE * );
     void * (*copy)( const void * );
@@ -39,7 +28,7 @@ struct _data_attributes {
     unsigned long (*hash)( const void * );
 };
 
-typedef struct _data_attributes attr_t;
+typedef struct _data_attributes_type attr_t;
 
 /**
  * Initialize attributes.
@@ -117,6 +106,6 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) );
  * @param data_hash the data hash function.
  * @param 0 on success, return -1 on error.
  */
-int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ));
+int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ) );
 
 #endif /* _ATTRIBUTES_H_ */

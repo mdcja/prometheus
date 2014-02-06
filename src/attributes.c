@@ -1,7 +1,9 @@
 /**
+ * This file provides an implementation of attributes.
+ *
  * @brief Provides an implementation of data attributes.
  * @author Julian Martinez del Campo
- * @license This software is released under the GNU GPL v3 license
+ * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * This file provides an implementation of the data attributes. This file also
  * provides the default data functions.
@@ -12,22 +14,6 @@
 
 #include "attributes.h"
 #include "error.h"
-
-#if 0
-/**
- * Data attributes.
- *
- * This structure holds the attributes that are commonly used when dealing with
- * data.
- */
-struct _data_attributes {
-    int (*compare)( const void *, const void * );
-    int (*print)( const void *, FILE * );
-    void * (*copy)( const void * );
-    void (*free)( void * );
-    unsigned long (*hash)( const void * );
-};
-#endif /* 0 */
 
 /**
  * Default data comparison function.
