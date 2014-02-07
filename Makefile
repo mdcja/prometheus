@@ -12,6 +12,7 @@ vpath %.c src
 vpath %.h include
 
 ERROR=error.o error_test
+MATH=math.o math_test
 ATTRIBUTES=attributes.o attributes_test
 STACK=stack_array.o stack_linked_list.o stack_array_test stack_linked_list_test
 QUEUE=queue_array.o queue_linked_list.o queue_circular_array.o queue_array_test queue_linked_list_test queue_circular_array_test
@@ -20,7 +21,7 @@ HASH_TABLE=hash_table_open_addressing.o hash_table_seperate_chaining.o hash_tabl
 
 # Make project
 .PHONY: all
-all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE) $(HASH_TABLE)
+all: $(ERROR) $(MATH) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE) $(HASH_TABLE)
 
 ###########################################################
 # Build Additional Libraries
@@ -28,6 +29,10 @@ all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE) $(HASH_TABLE)
 
 # Build error
 error.o: error.c include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+# Build math
+math.o: math.c include/math.h include/error.h
 	$(CC) $(CFLAGS) -c $<
 
 # Build attributes
@@ -81,6 +86,14 @@ error_test.o: tests/error_test.c include/error.h
 	$(CC) $(CFLAGS) -c $<
 
 error_test: error_test.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+# Math tests
+math_test.o: tests/math_test.c include/math.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+math_test: LDFLAGS+= -lm
+math_test: math_test.o math.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # Attributes tests
@@ -142,6 +155,7 @@ hash_table_seperate_chaining_test: hash_table_test.o hash_table_seperate_chainin
 .PHONY: check
 check: $(ERROR) $(ATTRIBUTES) $(STACK)
 	-./error_test
+	-./math_test
 	-./attributes_test
 	-./stack_array_test
 	-./stack_linked_list_test
@@ -161,6 +175,7 @@ check: $(ERROR) $(ATTRIBUTES) $(STACK)
 clean:
 	-$(RM) *.o
 	-$(RM) $(ERROR)
+	-$(RM) $(MATH)
 	-$(RM) $(ATTRIBUTES)
 	-$(RM) $(STACK)
 	-$(RM) $(QUEUE)
