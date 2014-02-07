@@ -945,7 +945,7 @@ END_TEST
  */
 Suite * dequeue_suite( void )
 {
-    Suite * s = suite_create( "Stack" );
+    Suite * s = suite_create( "Dequeue" );
     TCase * tc_core = tcase_create( "Core" );
     TCase * tc_data = tcase_create( "Data" );
     TCase * tc_error = tcase_create( "Error" );

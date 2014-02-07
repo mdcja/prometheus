@@ -788,7 +788,7 @@ END_TEST
  */
 Suite * queue_suite( void )
 {
-    Suite * s = suite_create( "Stack" );
+    Suite * s = suite_create( "Queue" );
     TCase * tc_core = tcase_create( "Core" );
     TCase * tc_data = tcase_create( "Data" );
     TCase * tc_error = tcase_create( "Error" );
