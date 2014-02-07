@@ -15,10 +15,11 @@ ERROR=error.o error_test
 ATTRIBUTES=attributes.o attributes_test
 STACK=stack_array.o stack_linked_list.o stack_array_test stack_linked_list_test
 QUEUE=queue_array.o queue_linked_list.o queue_circular_array.o queue_array_test queue_linked_list_test queue_circular_array_test
+DEQUEUE=dequeue_array.o dequeue_circular_array.o dequeue_doubly_linked_list.o dequeue_array_test dequeue_circular_array_test dequeue_doubly_linked_list_test
 
 # Make project
 .PHONY: all
-all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE)
+all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE)
 
 ###########################################################
 # Build Additional Libraries
@@ -51,6 +52,16 @@ queue_linked_list.o: queue_linked_list.c include/queue.h include/attributes.h in
 	$(CC) $(CFLAGS) -c $<
 
 queue_circular_array.o: queue_circular_array.c include/queue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+# Build dequeue
+dequeue_array.o: dequeue_array.c include/dequeue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+dequeue_circular_array.o: dequeue_circular_array.c include/dequeue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+dequeue_doubly_linked_list.o: dequeue_doubly_linked_list.c include/dequeue.h include/attributes.h include/error.h
 	$(CC) $(CFLAGS) -c $<
 
 ###########################################################
@@ -94,6 +105,19 @@ queue_linked_list_test: queue_test.o queue_linked_list.o attributes.o error.o
 queue_circular_array_test: queue_test.o queue_circular_array.o attributes.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
+# Dequeue tests
+dequeue_test.o: tests/dequeue_test.c include/dequeue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+dequeue_array_test: dequeue_test.o dequeue_array.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+dequeue_circular_array_test: dequeue_test.o dequeue_circular_array.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+dequeue_doubly_linked_list_test: dequeue_test.o dequeue_doubly_linked_list.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
 ###########################################################
 # Run unit tests
 ###########################################################
@@ -106,6 +130,9 @@ check: $(ERROR) $(ATTRIBUTES) $(STACK)
 	-./queue_array_test
 	-./queue_linked_list_test
 	-./queue_circular_array_test
+	-./dequeue_array_test
+	-./dequeue_circular_array_test
+	-./dequeue_doubly_linked_list_test
 
 ###########################################################
 # Clean project
@@ -117,3 +144,4 @@ clean:
 	-$(RM) $(ATTRIBUTES)
 	-$(RM) $(STACK)
 	-$(RM) $(QUEUE)
+	-$(RM) $(DEQUEUE)
