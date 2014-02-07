@@ -11,7 +11,6 @@
  * @note If the queue is implemented with a linked list the test_capacity and
  * test_reserve tests will fail.
  */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <check.h>
