@@ -16,10 +16,11 @@ ATTRIBUTES=attributes.o attributes_test
 STACK=stack_array.o stack_linked_list.o stack_array_test stack_linked_list_test
 QUEUE=queue_array.o queue_linked_list.o queue_circular_array.o queue_array_test queue_linked_list_test queue_circular_array_test
 DEQUEUE=dequeue_array.o dequeue_circular_array.o dequeue_doubly_linked_list.o dequeue_array_test dequeue_circular_array_test dequeue_doubly_linked_list_test
+HASH_TABLE=hash_table_open_addressing.o hash_table_seperate_chaining.o hash_table_open_addressing_test hash_table_seperate_chaining_test
 
 # Make project
 .PHONY: all
-all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE)
+all: $(ERROR) $(ATTRIBUTES) $(STACK) $(QUEUE) $(DEQUEUE) $(HASH_TABLE)
 
 ###########################################################
 # Build Additional Libraries
@@ -62,6 +63,13 @@ dequeue_circular_array.o: dequeue_circular_array.c include/dequeue.h include/att
 	$(CC) $(CFLAGS) -c $<
 
 dequeue_doubly_linked_list.o: dequeue_doubly_linked_list.c include/dequeue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+# Build hash table
+hash_table_open_addressing.o: hash_table_open_addressing.c include/hash_table.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+hash_table_seperate_chaining.o: hash_table_seperate_chaining.c include/hash_table.h include/attributes.h include/error.h
 	$(CC) $(CFLAGS) -c $<
 
 ###########################################################
@@ -118,6 +126,16 @@ dequeue_circular_array_test: dequeue_test.o dequeue_circular_array.o attributes.
 dequeue_doubly_linked_list_test: dequeue_test.o dequeue_doubly_linked_list.o attributes.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
+# Hash table tests
+hash_table_test.o: tests/hash_table_test.c include/hash_table.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+hash_table_open_addressing_test: hash_table_test.o hash_table_open_addressing.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+hash_table_seperate_chaining_test: hash_table_test.o hash_table_seperate_chaining.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
 ###########################################################
 # Run unit tests
 ###########################################################
@@ -133,6 +151,8 @@ check: $(ERROR) $(ATTRIBUTES) $(STACK)
 	-./dequeue_array_test
 	-./dequeue_circular_array_test
 	-./dequeue_doubly_linked_list_test
+	-./hash_table_open_addressing_test
+	-./hash_table_seperate_chaining_test
 
 ###########################################################
 # Clean project
@@ -145,3 +165,4 @@ clean:
 	-$(RM) $(STACK)
 	-$(RM) $(QUEUE)
 	-$(RM) $(DEQUEUE)
+	-$(RM) $(HASH_TABLE)
