@@ -9,10 +9,6 @@
  * attributes determine how the data is handled by stack. i.e. To properly
  * handle different data types such as integers or strings, the stack
  * attributes, or function pointers, must be set. 
- *
- * If the stack is initialized with NULL (in place of the stack attributes)
- * then the stack will default to comparing and printing pointers, copying data
- * by reference, and will not deallocate data.
  */
 #ifndef _STACK_H_
 #define _STACK_H_
