@@ -587,7 +587,7 @@ int hash_table_print( const hash_table_t * ht, FILE * fp )
         for( current = ht->hash_table[i]; current != NULL; current = current->next )
         {
             nchr += ht->kattr.print( current->key, fp );
-            nchr += fprintf( fp, "," );
+            nchr += fprintf( fp, " => " );
             nchr += ht->dattr.print( current->data, fp );
             nchr += fprintf( fp, "\n" );
         }
