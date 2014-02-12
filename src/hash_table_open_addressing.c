@@ -592,54 +592,6 @@ int hash_table_remove( hash_table_t ** ht, void * key )
         }
     }
 
-#if 0
-    /* find node */
-    idx = (*ht)->kattr.hash( key ) % (*ht)->capacity;
-
-    if( (*ht)->hash_table[ idx ] )
-    {
-        (*ht)->kattr.free( (*ht)->hash_table[ idx ]->key );
-        (*ht)->hash_table[ idx ]->key = NULL;
-
-        (*ht)->dattr.free( (*ht)->hash_table[ idx ]->data );
-        (*ht)->hash_table[ idx ]->data = NULL;
-
-        free( (*ht)->hash_table[ idx ] );
-        (*ht)->hash_table[ idx ] = NULL;
-
-        (*ht)->marker[ idx ] = 1;
-        (*ht)->count--;
-
-        assert( (*ht)->count >= 0 );
-
-        return 0;
-    }
-    else if( (*ht)->marker[ idx ] )
-    {
-        /* probe */
-        for( i = 1; i < (*ht)->capacity; ++i )
-        {
-            if( (*ht)->kattr.compare( key, (*ht)->hash_table[ (idx + i) % (*ht)->capacity ] ) == 0 )
-            {
-                (*ht)->kattr.free( (*ht)->hash_table[ (idx + i) % (*ht)->capacity ]->key );
-                (*ht)->hash_table[ (idx + i) % (*ht)->capacity ]->key = NULL;
-
-                (*ht)->dattr.free( (*ht)->hash_table[ (idx + i) % (*ht)->capacity ]->data );
-                (*ht)->hash_table[ (idx + i) % (*ht)->capacity ]->data = NULL;
-
-                free( (*ht)->hash_table[ (idx + i) % (*ht)->capacity ] );
-                (*ht)->hash_table[ (idx + i) % (*ht)->capacity ] = NULL;
-
-                (*ht)->count--;
-
-                assert( (*ht)->count >= 0 );
-
-                return 0;
-            }
-        }
-    }
-#endif
-
     error_code = ERROR_NOT_FOUND;
     error_print( "hash_table_remove" );
 

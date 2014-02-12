@@ -309,6 +309,7 @@ int hash_table_reserve( hash_table_t ** ht, int capacity )
     old_hash_table = (*ht)->hash_table;
     (*ht)->hash_table = new_hash_table;
     (*ht)->capacity = capacity;
+    (*ht)->memory = sizeof( hash_table_t ) + capacity * sizeof( struct _hash_table_node * ) + (*ht)->count * sizeof( struct _hash_table_node );
 
     /* free */
     free( old_hash_table );
@@ -410,6 +411,7 @@ int hash_table_insert( hash_table_t ** ht, void * key, void * data )
         (*ht)->hash_table[ idx ] = new_node;
 
         (*ht)->count++;
+        (*ht)->memory += sizeof( struct _hash_table_node );
     }
 
     return 0;
@@ -531,6 +533,7 @@ int hash_table_remove( hash_table_t ** ht, void * key )
             current = NULL;
 
             (*ht)->count--;
+            (*ht)->memory -= sizeof( struct _hash_table_node );
 
             assert( (*ht)->count >= 0 );
 
