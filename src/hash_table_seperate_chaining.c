@@ -198,10 +198,15 @@ int hash_table_clear( hash_table_t ** ht )
     assert( (*ht)->kattr.free );
     assert( (*ht)->dattr.free );
 
+    if( (*ht)->count == 0 )
+    {
+        return 0;
+    }
+
     for( i = 0; i < (*ht)->capacity; ++i )
     {
         /* destroy each chain */
-        for( current = (*ht)->hash_table[i]; current != NULL; )
+        for( current = (*ht)->hash_table[ i ]; current != NULL; )
         {
             temp = current;
             current = current->next;
@@ -255,7 +260,7 @@ int hash_table_reserve( hash_table_t ** ht, int capacity )
         return -1;
     }
 
-    if( capacity <= (*ht)->count )
+    if( capacity < (*ht)->count )
     {
         error_code = ERROR_INVALID_CAPACITY;
         error_print( "hash_table_reserve" );
@@ -277,10 +282,10 @@ int hash_table_reserve( hash_table_t ** ht, int capacity )
     }
 
     /* copy */
-    for( int i = 0; i < (*ht)->capacity; ++i )
+    for( i = 0; i < (*ht)->capacity; ++i )
     {
         /* follow each chain */
-        for( current = (*ht)->hash_table[i], temp = NULL; current != NULL; )
+        for( current = (*ht)->hash_table[ i ], temp = NULL; current != NULL; )
         {
             temp = current;
             current = current->next;
@@ -288,15 +293,15 @@ int hash_table_reserve( hash_table_t ** ht, int capacity )
             idx = (*ht)->kattr.hash( temp->key ) % capacity;
 
             /* insert into new table */
-            if( new_hash_table[idx] == NULL )
+            if( new_hash_table[ idx ] == NULL )
             {
                 temp->next = NULL;
             } 
             else
             {
-                temp->next = new_hash_table[idx];
+                temp->next = new_hash_table[ idx ];
             }
-            old_hash_table[idx] = temp;
+            new_hash_table[ idx ] = temp;
         }
     }
 
@@ -354,6 +359,11 @@ int hash_table_insert( hash_table_t ** ht, void * key, void * data )
         return -1;
     }
 
+    assert( (*ht)->kattr.copy );
+    assert( (*ht)->dattr.copy );
+    assert( (*ht)->kattr.compare );
+    assert( (*ht)->dattr.free );
+
     /* create */
     new_node = (struct _hash_table_node *)calloc( 1, sizeof( struct _hash_table_node ) );
     assert( new_node );
@@ -365,21 +375,17 @@ int hash_table_insert( hash_table_t ** ht, void * key, void * data )
         return -1;
     }
 
-    assert( (*ht)->kattr.copy );
-    assert( (*ht)->dattr.copy );
-    assert( (*ht)->kattr.compare );
-    assert( (*ht)->dattr.free );
-
     /* init */
     new_node->key = (*ht)->kattr.copy( key );
-    new_node->data = (*ht)->dattr.copy( key );
+    new_node->data = (*ht)->dattr.copy( data );
     new_node->next = NULL;
 
     /* check for conflicts */
     idx = (*ht)->kattr.hash( key ) % (*ht)->capacity;
-    for( current = (*ht)->hash_table[idx]; current != NULL; current = current->next )
+
+    for( current = (*ht)->hash_table[ idx ]; current != NULL; current = current->next )
     {
-        /* update entry */
+        /* update */
         if( (*ht)->kattr.compare( current->key, key ) == 0 )
         {
             (*ht)->dattr.free( current->data );
@@ -387,18 +393,23 @@ int hash_table_insert( hash_table_t ** ht, void * key, void * data )
 
             current->data = (*ht)->dattr.copy( data );
 
+            (*ht)->kattr.free( new_node->key );
+            new_node->key = NULL;
+            (*ht)->dattr.free( new_node->data );
+            new_node->data = NULL;
+            free( new_node );
+            new_node = NULL;
+
             break;
         }
     }
 
-    /* insert */
     if( current == NULL )
     {
-        new_node->next = (*ht)->hash_table[idx];
-        (*ht)->hash_table[idx] = new_node;
+        new_node->next = (*ht)->hash_table[ idx ];
+        (*ht)->hash_table[ idx ] = new_node;
 
         (*ht)->count++;
-        (*ht)->memory += sizeof( struct _hash_table_node );
     }
 
     return 0;
@@ -452,7 +463,6 @@ void * hash_table_lookup( const hash_table_t * ht, void * key )
  */
 int hash_table_remove( hash_table_t ** ht, void * key )
 {
-    struct _hash_table_node * temp = NULL;
     struct _hash_table_node * current = NULL;
     struct _hash_table_node * prev = NULL;
     int idx = 0;
@@ -482,6 +492,14 @@ int hash_table_remove( hash_table_t ** ht, void * key )
         return -1;
     }
 
+    if( (*ht)->count <= 0 )
+    {
+        error_code = ERROR_UNDERFLOW;
+        error_print( "hash_table_remove" );
+
+        return -1;
+    }
+
     assert( (*ht)->kattr.free );
     assert( (*ht)->kattr.compare );
     assert( (*ht)->dattr.free );
@@ -502,8 +520,6 @@ int hash_table_remove( hash_table_t ** ht, void * key )
                 prev->next = current->next;
             }
 
-            current = current->next;
-
             /* deallocate */
             (*ht)->kattr.free( current->key );
             current->key = NULL;
@@ -513,6 +529,8 @@ int hash_table_remove( hash_table_t ** ht, void * key )
 
             free( current );
             current = NULL;
+
+            (*ht)->count--;
 
             assert( (*ht)->count >= 0 );
 
@@ -558,7 +576,7 @@ int hash_table_print( const hash_table_t * ht, FILE * fp )
     assert( ht->dattr.print );
 
     /* print */
-    nchr += fprintf( fp, "Hash Table (%p)", (void *)ht );
+    nchr += fprintf( fp, "Hash Table (%p)\n", (void *)ht );
     nchr += fprintf( fp, " - count = %d\n", ht->count );
     nchr += fprintf( fp, " - capacity = %d\n", ht->capacity );
     nchr += fprintf( fp, " - load = %f\n", hash_table_load( ht ) );
