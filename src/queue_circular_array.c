@@ -2,9 +2,9 @@
  * This file provides an implementation of a queue using a circular array data
  * structure.
  *
- * @brief Provide a queue implemented using a circular array.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a queue implemented using a circular array.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * The memory complexity of this queue is O(1).
  * 
@@ -565,7 +565,7 @@ int queue_print( const queue_t * queue, FILE * fp )
 /**
  * Get the memory usage of the queue.
  */
-inline int queue_memory( const queue_t * queue )
+int queue_memory( const queue_t * queue )
 {
     /* check */
     if( !queue )
@@ -584,7 +584,7 @@ inline int queue_memory( const queue_t * queue )
 /**
  * Get the number of items in the queue.
  */
-inline int queue_count( const queue_t * queue )
+int queue_count( const queue_t * queue )
 {
     /* check */
     if( !queue )
@@ -603,7 +603,7 @@ inline int queue_count( const queue_t * queue )
 /**
  * Get the capacity of the queue.
  */
-inline int queue_capacity( const queue_t * queue )
+int queue_capacity( const queue_t * queue )
 {
     /* check */
     if( !queue )

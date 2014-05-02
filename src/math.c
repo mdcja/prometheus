@@ -1,9 +1,9 @@
 /**
  * This file provides an implementation of math functions.
  *
- * @brief provides generic math functions.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief provides generic math functions.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * This file implements some generic math functions.
  */
@@ -34,14 +34,14 @@
  * otherwise, let p now equal this new number (which is the next prime),
  * and repeat from step 3
  *
- * @note possible optimizations include sieving only odd numbers, using a more
+ * \note possible optimizations include sieving only odd numbers, using a more
  * complex wheel, packing the sieve into bits to imporove locality,
  * multithreading, etc.
  *
- * @pre limit is greater than 2.
- * @param limit.
- * @param primes_count.
- * @return the sieve with primes.
+ * \pre limit is greater than 2.
+ * \param limit.
+ * \param primes_count.
+ * \return the sieve with primes.
  */
 static int * sieve_eratosthenes( unsigned int limit, int * primes_count )
 {
@@ -97,9 +97,9 @@ static int * sieve_eratosthenes( unsigned int limit, int * primes_count )
  * This function generates a prime number that is at least
  *  of size limit
  *
- * @param limit the limit at which prime numbers are not generated after. Must
+ * \param limit the limit at which prime numbers are not generated after. Must
  *  be greater than 2.
- * @return a prime number of at least limit
+ * \return a prime number of at least limit
  */
 unsigned long generate_prime( unsigned int limit )
 {
@@ -148,10 +148,10 @@ unsigned long generate_prime( unsigned int limit )
  *
  * This function generates a random number between min and max.
  *
- * @pre random number generator has been seeded
- * @param min the minimum number
- * @param max the max number
- * @return a random number between min and max
+ * \pre random number generator has been seeded
+ * \param min the minimum number
+ * \param max the max number
+ * \return a random number between min and max
  */
 int random_number( int min, int max )
 {

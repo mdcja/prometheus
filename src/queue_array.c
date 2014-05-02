@@ -2,9 +2,9 @@
  * This file provides an implementation of a queue using an array data
  * structure.
  *
- * @brief Provide a queue implemented using an array.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a queue implemented using an array.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * The memory complexity for this queue is O(1).
  * 

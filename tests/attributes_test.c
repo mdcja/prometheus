@@ -1,9 +1,24 @@
 /**
- * This file provides tests for attributes.
+ * \brief Provides attributes tests.
+ * \author Julian Martinez del Campo <mdcja@outlook.com>
+ * \page attributes_test Attributes tests
  *
- * @brief Provides attributes tests.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \section license GNU LGPLv3 License
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * \section atrributes_test_summary Attributes Test Summary
  *
  * This file provides unit tests for attributes. Unit tests are run using the
  * Check framework available at http://check.sourceforge.net/.
@@ -48,8 +63,7 @@ static unsigned long dummy_hash( const void * d )
  * This test takes an empty attributes structure and initializes it to default
  * values.
  *
- * @post The attributes are set to default values.
- * @post Normal program termination.
+ * \post The attributes are set to default values.
  */
 START_TEST( test_attributes_init )
 {
@@ -73,8 +87,7 @@ END_TEST
  *
  * This test takes an empty attributes structure and sets the compare function.
  *
- * @post The compare attribute is set.
- * @post Normal program termination.
+ * \post The compare attribute is set.
  */
 START_TEST( test_attributes_set_compare )
 {
@@ -98,8 +111,7 @@ END_TEST
  *
  * This test takes an empty attributes structure and sets the print function.
  *
- * @post The print attribute is set.
- * @post Normal program termination.
+ * \post The print attribute is set.
  */
 START_TEST( test_attributes_set_print )
 {
@@ -123,8 +135,7 @@ END_TEST
  *
  * This test takes an empty attributes structure and sets the copy function.
  *
- * @post The copy attribute is set.
- * @post Normal program termination.
+ * \post The copy attribute is set.
  */
 START_TEST( test_attributes_set_copy )
 {
@@ -148,8 +159,7 @@ END_TEST
  *
  * This test takes an empty attributes structure and sets the free function.
  *
- * @post The free attribute is set.
- * @post Normal program termination.
+ * \post The free attribute is set.
  */
 START_TEST( test_attributes_set_free )
 {
@@ -173,8 +183,7 @@ END_TEST
  *
  * This test takes an empty attributes structure and sets the hash function.
  *
- * @post The hash attribute is set.
- * @post Normal program termination.
+ * \post The hash attribute is set.
  */
 START_TEST( test_attributes_set_hash )
 {
@@ -199,10 +208,9 @@ END_TEST
  * This test tries to initialize attributes without passing in an attributes
  * structure.
  *
- * @post The attr_init() function encounters a null parameter error.
- * @post Normal program termination.
+ * \post The attr_init() function encounters a null parameter error.
  */
-START_TEST( test_attributes_init_error )
+START_TEST( error_test_attributes_init )
 {
     int rc = 0;
 
@@ -219,19 +227,18 @@ END_TEST
 /**
  * Test attribute set compare error
  *
- * This test passes null parameters to the set compare function.
+ * This test passes a null attributes structure to the set compare function.
  *
- * @post The attr_set_compare() function encounters two null parameter errors.
- * @post Normal program termination.
+ * \post The attr_set_compare() function encounters a null parameter error.
  */
-START_TEST( test_attributes_set_compare_error )
+START_TEST( error_test_attributes_set_compare_null_attributes )
 {
     attr_t attributes = {0};
     int rc = 0;
 
-    /* test null attributes */
     error_code = 0; /* initialize the error code */
 
+    /* test null attributes */
     rc = attr_set_compare( NULL, dummy_compare );
 
     /* check */
@@ -242,12 +249,53 @@ START_TEST( test_attributes_set_compare_error )
     ck_assert( attributes.compare == NULL );
     ck_assert( attributes.hash == NULL );
     ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set compare error
+ *
+ * This test passes null parameters to the set compare function.
+ *
+ * \post The attr_set_compare() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_compare_null_function )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
 
     /* test null compare function */
-    error_code = 0; /* initialize the error code */
-    rc = 0;         /* reset return value */
-
     rc = attr_set_compare( &attributes, NULL );
+
+    /* check */
+    ck_assert( rc == -1 );
+    ck_assert( error_code == ERROR_NULL_PARAMETER );
+    ck_assert( attributes.copy == NULL );
+    ck_assert( attributes.free == NULL );
+    ck_assert( attributes.compare == NULL );
+    ck_assert( attributes.hash == NULL );
+    ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set compare error
+ *
+ * This test passes null parameters to the set compare function.
+ *
+ * \post The attr_set_compare() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_compare_null_parameters )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
+
+    /* test null paramters */
+    rc = attr_set_compare( NULL, NULL );
 
     /* check */
     ck_assert( rc == -1 );
@@ -265,17 +313,16 @@ END_TEST
  *
  * This test passes null parameters to the set print function.
  *
- * @post The attr_set_print() function encounters two null parameter errors.
- * @post Normal program termination.
+ * \post The attr_set_print() function encounters null parameter error.
  */
-START_TEST( test_attributes_set_print_error )
+START_TEST( error_test_attributes_set_print_null_attributes )
 {
     attr_t attributes = {0};
     int rc = 0;
 
-    /* test null attributes */
     error_code = 0; /* initialize the error code */
 
+    /* test null attributes */
     rc = attr_set_print( NULL, dummy_print );
 
     /* check */
@@ -286,12 +333,53 @@ START_TEST( test_attributes_set_print_error )
     ck_assert( attributes.compare == NULL );
     ck_assert( attributes.hash == NULL );
     ck_assert( attributes.print == NULL );
+}
+END_TEST
 
-    /* test null compare function */
+/**
+ * Test attribute set print error
+ *
+ * This test passes null parameters to the set print function.
+ *
+ * \post The attr_set_print() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_print_null_function )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
     error_code = 0; /* initialize the error code */
-    rc = 0;         /* reset return value */
 
+    /* test null print function */
     rc = attr_set_print( &attributes, NULL );
+
+    /* check */
+    ck_assert( rc == -1 );
+    ck_assert( error_code == ERROR_NULL_PARAMETER );
+    ck_assert( attributes.copy == NULL );
+    ck_assert( attributes.free == NULL );
+    ck_assert( attributes.compare == NULL );
+    ck_assert( attributes.hash == NULL );
+    ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set print error
+ *
+ * This test passes null parameters to the set print function.
+ *
+ * \post The attr_set_print() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_print_null_parameters )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
+
+    /* test null paramters */
+    rc = attr_set_print( NULL, NULL );
 
     /* check */
     ck_assert( rc == -1 );
@@ -309,17 +397,16 @@ END_TEST
  *
  * This test passes null parameters to the set copy function.
  *
- * @post The attr_set_copy() function encounters two null parameter errors.
- * @post Normal program termination.
+ * \post The attr_set_copy() function encounters a null parameter error.
  */
-START_TEST( test_attributes_set_copy_error )
+START_TEST( error_test_attributes_set_copy_null_attributes )
 {
     attr_t attributes = {0};
     int rc = 0;
 
-    /* test null attributes */
     error_code = 0; /* initialize the error code */
 
+    /* test null attributes */
     rc = attr_set_copy( NULL, dummy_copy );
 
     /* check */
@@ -330,12 +417,53 @@ START_TEST( test_attributes_set_copy_error )
     ck_assert( attributes.compare == NULL );
     ck_assert( attributes.hash == NULL );
     ck_assert( attributes.print == NULL );
+}
+END_TEST
 
-    /* test null compare function */
+/**
+ * Test attribute set copy error
+ *
+ * This test passes null parameters to the set copy function.
+ *
+ * \post The attr_set_copy() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_copy_null_function )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
     error_code = 0; /* initialize the error code */
-    rc = 0;         /* reset return value */
 
+    /* test null copy function */
     rc = attr_set_copy( &attributes, NULL );
+
+    /* check */
+    ck_assert( rc == -1 );
+    ck_assert( error_code == ERROR_NULL_PARAMETER );
+    ck_assert( attributes.copy == NULL );
+    ck_assert( attributes.free == NULL );
+    ck_assert( attributes.compare == NULL );
+    ck_assert( attributes.hash == NULL );
+    ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set copy error
+ *
+ * This test passes null parameters to the set copy function.
+ *
+ * \post The attr_set_copy() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_copy_null_parameters )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
+
+    /* test null parameters */
+    rc = attr_set_copy( NULL, NULL );
 
     /* check */
     ck_assert( rc == -1 );
@@ -353,17 +481,16 @@ END_TEST
  *
  * This test passes null parameters to the set free function.
  *
- * @post The attr_set_free() function encounters two null parameter errors.
- * @post Normal program termination.
+ * \post The attr_set_free() function encounters a null parameter error.
  */
-START_TEST( test_attributes_set_free_error )
+START_TEST( error_test_attributes_set_free_null_attributes )
 {
     attr_t attributes = {0};
     int rc = 0;
 
-    /* test null attributes */
     error_code = 0; /* initialize the error code */
 
+    /* test null attributes */
     rc = attr_set_free( NULL, dummy_free );
 
     /* check */
@@ -374,12 +501,53 @@ START_TEST( test_attributes_set_free_error )
     ck_assert( attributes.compare == NULL );
     ck_assert( attributes.hash == NULL );
     ck_assert( attributes.print == NULL );
+}
+END_TEST
 
-    /* test null compare function */
+/**
+ * Test attribute set free error
+ *
+ * This test passes null parameters to the set free function.
+ *
+ * \post The attr_set_free() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_free_null_function )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
     error_code = 0; /* initialize the error code */
-    rc = 0;         /* reset return value */
 
+    /* test null free function */
     rc = attr_set_free( &attributes, NULL );
+
+    /* check */
+    ck_assert( rc == -1 );
+    ck_assert( error_code == ERROR_NULL_PARAMETER );
+    ck_assert( attributes.copy == NULL );
+    ck_assert( attributes.free == NULL );
+    ck_assert( attributes.compare == NULL );
+    ck_assert( attributes.hash == NULL );
+    ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set free error
+ *
+ * This test passes null parameters to the set free function.
+ *
+ * \post The attr_set_free() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_free_null_parameters )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
+
+    /* test null parameters */
+    rc = attr_set_free( NULL, NULL );
 
     /* check */
     ck_assert( rc == -1 );
@@ -397,17 +565,16 @@ END_TEST
  *
  * This test passes null parameters to the set hash function.
  *
- * @post The attr_set_hash() function encounters two null parameter errors.
- * @post Normal program termination.
+ * \post The attr_set_hash() function encounters a null parameter error.
  */
-START_TEST( test_attributes_set_hash_error )
+START_TEST( error_test_attributes_set_hash_null_attributes )
 {
     attr_t attributes = {0};
     int rc = 0;
 
-    /* test null attributes */
     error_code = 0; /* initialize the error code */
 
+    /* test null attributes */
     rc = attr_set_hash( NULL, dummy_hash );
 
     /* check */
@@ -418,12 +585,53 @@ START_TEST( test_attributes_set_hash_error )
     ck_assert( attributes.compare == NULL );
     ck_assert( attributes.hash == NULL );
     ck_assert( attributes.print == NULL );
+}
+END_TEST
 
-    /* test null compare function */
+/**
+ * Test attribute set hash error
+ *
+ * This test passes null parameters to the set hash function.
+ *
+ * \post The attr_set_hash() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_hash_null_function )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
     error_code = 0; /* initialize the error code */
-    rc = 0;         /* reset return value */
 
+    /* test null hash function */
     rc = attr_set_hash( &attributes, NULL );
+
+    /* check */
+    ck_assert( rc == -1 );
+    ck_assert( error_code == ERROR_NULL_PARAMETER );
+    ck_assert( attributes.copy == NULL );
+    ck_assert( attributes.free == NULL );
+    ck_assert( attributes.compare == NULL );
+    ck_assert( attributes.hash == NULL );
+    ck_assert( attributes.print == NULL );
+}
+END_TEST
+
+/**
+ * Test attribute set hash error
+ *
+ * This test passes null parameters to the set hash function.
+ *
+ * \post The attr_set_hash() function encounters a null parameter error.
+ */
+START_TEST( error_test_attributes_set_hash_null_parameters )
+{
+    attr_t attributes = {0};
+    int rc = 0;
+
+    error_code = 0; /* initialize the error code */
+
+    /* test null parameters */
+    rc = attr_set_hash( NULL, NULL );
 
     /* check */
     ck_assert( rc == -1 );
@@ -458,12 +666,22 @@ Suite * attributes_suite( void )
     /* error test cases */
     TCase * tc_error = tcase_create( "Error" );
 
-    tcase_add_test( tc_core, test_attributes_init_error );
-    tcase_add_test( tc_core, test_attributes_set_compare_error );
-    tcase_add_test( tc_core, test_attributes_set_print_error );
-    tcase_add_test( tc_core, test_attributes_set_copy_error );
-    tcase_add_test( tc_core, test_attributes_set_free_error );
-    tcase_add_test( tc_core, test_attributes_set_hash_error );
+    tcase_add_test( tc_core, error_test_attributes_init );
+    tcase_add_test( tc_core, error_test_attributes_set_compare_null_attributes );
+    tcase_add_test( tc_core, error_test_attributes_set_compare_null_function );
+    tcase_add_test( tc_core, error_test_attributes_set_compare_null_parameters );
+    tcase_add_test( tc_core, error_test_attributes_set_print_null_attributes );
+    tcase_add_test( tc_core, error_test_attributes_set_print_null_function );
+    tcase_add_test( tc_core, error_test_attributes_set_print_null_parameters );
+    tcase_add_test( tc_core, error_test_attributes_set_copy_null_attributes );
+    tcase_add_test( tc_core, error_test_attributes_set_copy_null_function );
+    tcase_add_test( tc_core, error_test_attributes_set_copy_null_parameters );
+    tcase_add_test( tc_core, error_test_attributes_set_free_null_attributes );
+    tcase_add_test( tc_core, error_test_attributes_set_free_null_function );
+    tcase_add_test( tc_core, error_test_attributes_set_free_null_parameters );
+    tcase_add_test( tc_core, error_test_attributes_set_hash_null_attributes );
+    tcase_add_test( tc_core, error_test_attributes_set_hash_null_function );
+    tcase_add_test( tc_core, error_test_attributes_set_hash_null_parameters );
 
     suite_add_tcase( s, tc_error );
 
@@ -473,14 +691,17 @@ Suite * attributes_suite( void )
 /**
  * Attributes unit tests
  *
- * @post All unit tests specified in the testing suite are performed.
+ * \post All unit tests specified in the testing suite are performed.
  */
 int main( void )
 {
     int number_failed = 0;
-    Suite * s = attributes_suite();
-    SRunner * sr = srunner_create( s );
-    srunner_run_all( sr, CK_NORMAL );
+    Suite * s = NULL;
+    SRunner * sr = NULL;
+
+    s = attributes_suite();
+    sr = srunner_create( s );
+    srunner_run_all( sr, CK_VERBOSE );
     number_failed = srunner_ntests_failed( sr );
     srunner_free( sr );
 

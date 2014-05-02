@@ -2,9 +2,9 @@
  * This file provides an implementation of a hash table using seperate chaining
  * with linked lists.
  *
- * @brief Provides a hash table ADT implemented using seperate chaining.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provides a hash table ADT implemented using seperate chaining.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * While this implementation allows for the hash table to be filled beyond its
  * normal capacity, performance will degrade linearly.

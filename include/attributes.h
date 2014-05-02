@@ -1,9 +1,27 @@
 /**
- * This file provides data attributes.
+ * \brief Provides data attributes.
+ * \author Julian Martinez del Campo
+ * \copyright Julian Martinez del Campo, 2014
+ * \page attributes Attributes
  *
- * @brief Provides data attributes.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \section license LGPLv3
+ *
+ * This file is part of Prometheus.
+ *
+ * Prometheus is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * Prometheus is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Prometheus.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * \section attributes_intro Introduction
  *
  * The data attributes are used to manipulate the data stored in the abstract
  * data types. By changing the attributes, data can be dealt with in a more
@@ -36,11 +54,11 @@ typedef struct _data_attributes_type attr_t;
  * This function initializes a data attributes structure. By default the
  * attributes manipulate pointer values.
  * 
- * @post If an error occurs then error_code is set (see error.h).
- * @post The all data attributes are initialized to default values, and is safe
+ * \post If an error occurs then error_code is set (see error.h).
+ * \post The all data attributes are initialized to default values, and is safe
  * to use in a data structure.  
- * @param attr the attributes to initialize.
- * @return 0 on success, return -1 on error.
+ * \param attr the attributes to initialize.
+ * \return 0 on success, return -1 on error.
  */
 int attr_init( attr_t * attr );
 
@@ -51,10 +69,10 @@ int attr_init( attr_t * attr );
  * two parameters, data A and data B. It then returns -1,0,1 if A is less than,
  * equal to, or greater than B.
  *
- * @post If an error occurs, then error_code is set (see error.h).
- * @param attr the attributes to set.
- * @param data_compare the comparator function.
- * @return 0 on success, return -1 on error.
+ * \post If an error occurs, then error_code is set (see error.h).
+ * \param attr the attributes to set.
+ * \param data_compare the comparator function.
+ * \return 0 on success, return -1 on error.
  */
 int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const void * ) );
 
@@ -65,9 +83,9 @@ int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const vo
  * two parameters, data, and a file pointer to print to. It then returns the
  * number of characters printed to the stream, or -1 if an error occurred.
  *
- * @param attr the attributes to set.
- * @param data_print the data print function.
- * @return 0 on success, return -1 on error.
+ * \param attr the attributes to set.
+ * \param data_print the data print function.
+ * \return 0 on success, return -1 on error.
  */
 int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) );
 
@@ -77,9 +95,9 @@ int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) );
  * This function sets the data copy function. The copy function takes one
  * parameter, data, and it then returns a pointer to a copy of the data.
  *
- * @param attr the attributes to set.
- * @param data_copy the data copy function.
- * @return 0 on success, return -1 on error.
+ * \param attr the attributes to set.
+ * \param data_copy the data copy function.
+ * \return 0 on success, return -1 on error.
  */
 int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) );
 
@@ -89,9 +107,9 @@ int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) );
  * This function sets the data free function. The free function takes one
  * parameter, data, and it then deallocates it from memory.
  *
- * @param attr the attributes to set.
- * @param data_free the data deallocation function.
- * @return 0 on success, return -1 on error.
+ * \param attr the attributes to set.
+ * \param data_free the data deallocation function.
+ * \return 0 on success, return -1 on error.
  */
 int attr_set_free( attr_t * attr, void (*data_free)( void * ) );
 
@@ -102,9 +120,9 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) );
  * parameter, data, and it then hashes the data and returns the hashed value as
  * an unsigned long integer.
  *
- * @param attr the attributes to set.
- * @param data_hash the data hash function.
- * @param 0 on success, return -1 on error.
+ * \param attr the attributes to set.
+ * \param data_hash the data hash function.
+ * \param 0 on success, return -1 on error.
  */
 int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ) );
 

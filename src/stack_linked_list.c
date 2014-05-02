@@ -2,9 +2,9 @@
  * This file provides an implementation of a stack using a linked list data
  * structure.
  *
- * @brief Provide a stack implemented using a linked list.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a stack implemented using a linked list.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  * 
  * This implementation provides O(n) space complexity for a stack.
  *
@@ -27,7 +27,7 @@
  * reserve      | ----
  * remove item  | O(n)
  *
- * @warning stack_capacity() and stack_reserve() are unimplemented
+ * \warning stack_capacity() and stack_reserve() are unimplemented
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -58,7 +58,7 @@ struct _stack_type {
 /**
  * Create a new stack.
  *
- * @note The capacity is ignored.
+ * \note The capacity is ignored.
  *
  * Creates a new stack implemented using a linked list.
  */

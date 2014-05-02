@@ -2,9 +2,9 @@
  * This file provides an implementation of a dequeue using a doubly linked list
  * data structure.
  * 
- * @brief Provide a dequeue implemented using a doubly linked list.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a dequeue implemented using a doubly linked list.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * This implementation provides the following run time complexity for a dequeue
  * with n elements:

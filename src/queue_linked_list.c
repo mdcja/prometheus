@@ -2,9 +2,9 @@
  * This file provides an implementation of a queue using a modified linked list
  * data structure.
  *
- * @brief Provide a queue implemented using a linked list.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a queue implemented using a linked list.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * The memory complexity for this queue is O(n).
  * 
@@ -21,10 +21,10 @@
  * remove/pop   | O(1)
  * count        | O(1)
  * memory       | O(1)
- * capacity     | ----
+ * capacity     | O(1)
  * print        | O(n)
  * clear        | O(n)
- * reserve      | ----
+ * reserve      | O(1)
  * remove item  | O(n)
  */
 #include <stdlib.h>
@@ -144,7 +144,7 @@ int queue_reserve( queue_t ** queue, int capacity )
     error_code = ERROR_NOT_IMPLEMENTED;
     error_print( "queue_reserve" );
 
-    return -1;
+    return 0;
 }
 
 /**
@@ -580,12 +580,21 @@ inline int queue_count( const queue_t * queue )
 /**
  * Get the capacity of the queue.
  *
- * This function does nothing.
+ * Always return 1 higher than the current count, always leaving one empty
+ * space in the array.
  */
 int queue_capacity( const queue_t * queue )
 {
-    error_code = ERROR_NOT_IMPLEMENTED;
-    error_print( "queue_capacity" );
+    /* check */
+    if( !queue )
+    {
+        error_code = ERROR_NULL_PARAMETER;
+        error_print( "queue_capacity" );
 
-    return -1;
+        return -1;
+    }
+
+    assert( queue->count >= 0 );
+
+    return queue->count + 1;
 }

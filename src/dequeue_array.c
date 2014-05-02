@@ -2,9 +2,9 @@
  * This file provides an implementation of a dequeue using an array data
  * structure.
  *
- * @brief Provide a dequeue implemented using an array.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provide a dequeue implemented using an array.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * This dequeue has a memory complexity of O(1).
  * 

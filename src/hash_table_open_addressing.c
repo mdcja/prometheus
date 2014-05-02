@@ -1,9 +1,9 @@
 /**
  * This file provides a hash table implemented using open addressing
  *
- * @brief Provides a hash table ADT implemented using open addressing.
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * \brief Provides a hash table ADT implemented using open addressing.
+ * \author Julian Martinez del Campo
+ * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
  *
  * This file provides an implementation of a hash table using open addressing.
  * Collisions are resolved via linear probing.
