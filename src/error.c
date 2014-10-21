@@ -1,31 +1,22 @@
-/**
- * This file provides error reporting implementation
+/* Author: Julian Martinez del Campo
  *
- * @brief Provides an implementation of errors
- * @author Julian Martinez del Campo
- * @license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
- *
- * This file implements error reporting functions.
+ * This file implements error.h
  */
-#include <stdio.h>
-
 #include "error.h"
 
-#define MAX_STRLEN 256
+#define MAX_STRLEN 256  /* the maximum string length */
 
-/**
- * Get the error name
- *
- * This function returns a string containing the name of the error that occured
- *
- * @param error the error number 
- * @return a string containing the error that occured
+/* Get the name of an error. Returns a null terminated character array
+ * containing the error type.
  */
 static char * error_name( error_t error )
 {
+    char * error_name = NULL;
+
+    /* order MUST correspond to the order of errors in error_t */
     static char * error_names[ MAX_STRLEN ] = {
-        "no error",
         "unknown",
+        "no error",
         "memory allocation failed",
         "null parameter",
         "not found",
@@ -35,66 +26,66 @@ static char * error_name( error_t error )
         "underflow"
     };
         
+    /* assign error message with error */
     switch( error )
     {
-    case ERROR_NO_ERROR:
-        return error_names[ ERROR_NO_ERROR ];
-    case ERROR_MEMORY_ALLOCATION_FAILED:
-        return error_names[ ERROR_MEMORY_ALLOCATION_FAILED ];
-    case ERROR_NULL_PARAMETER:
-        return error_names[ ERROR_NULL_PARAMETER ];
-    case ERROR_NOT_FOUND:
-        return error_names[ ERROR_NOT_FOUND ];
-    case ERROR_INVALID_CAPACITY:
-        return error_names[ ERROR_INVALID_CAPACITY ];
-    case ERROR_NOT_IMPLEMENTED:
-        return error_names[ ERROR_NOT_IMPLEMENTED ];
-    case ERROR_OVERFLOW:
-        return error_names[ ERROR_OVERFLOW ];
-    case ERROR_UNDERFLOW:
-        return error_names[ ERROR_UNDERFLOW ];
+    case E_NO_ERROR:
+        error_name = error_names[ E_NO_ERROR ];
+        break;
+
+    case E_MEMORY_ALLOCATION_FAILED:
+        error_name = error_names[ E_MEMORY_ALLOCATION_FAILED ];
+        break;
+
+    case E_NULL_PARAMETER:
+        error_name = error_names[ E_NULL_PARAMETER ];
+        break;
+
+    case E_NOT_FOUND:
+        error_name = error_names[ E_NOT_FOUND ];
+        break;
+
+    case E_INVALID_CAPACITY:
+        error_name = error_names[ E_INVALID_CAPACITY ];
+        break;
+
+    case E_NOT_IMPLEMENTED:
+        error_name = error_names[ E_NOT_IMPLEMENTED ];
+        break;
+
+    case E_OVERFLOW:
+        error_name = error_names[ E_OVERFLOW ];
+        break;
+
+    case E_UNDERFLOW:
+        error_name = error_names[ E_UNDERFLOW ];
+        break;
+
     default:
-        return error_names[ ERROR_UNKNOWN ];
+        error_name = error_names[ E_UNKNOWN ];
+        break;
     }
+
+    return error_name;
 }
 
-/**
- * Get error message
- */
-inline char * error_get_message( int error )
+inline char * error_get_message( error_t error )
 {
     return error_name( error );
 }
 
-/**
- * Print the error that occured
+/* Print error messages in the following format:
+ *  ERROR: (<error code>) <error name> : <error messsage>
  */
 int error_print( const char * msg )
 {
-    int nchr = 0;
-
-#ifndef NERROR
-    nchr += fprintf( stderr, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
-#ifdef VERBOSE
-    nchr += fprintf( stderr, " - %s\n", error_name( error_code ) );
-    nchr += fprintf( stderr, " - error code = %d\n", error_code );
-#endif /* VERBOSE */
-#endif /* NERROR */
-    return nchr;
+    return printf( "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 }
 
-/**
- * Print the error that occured with a message
+/* Print error messages in the following format:
+ *  ERROR: (<error code>) <error name> : <error messsage>
  */
 int error_print_message( FILE * fp, char * msg )
 {
-    int nchr = 0;
-#ifndef NERROR
-    nchr += fprintf( fp, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
-#ifdef VERBOSE 
-    nchr += fprintf( fp, " - %s\n", error_name( error_code ) );
-    nchr += fprintf( fp, " - error code = %d\n", error_code );
-#endif /* VERBOSE */
-#endif /* NERROR */
-    return nchr;
+    return fprintf( fp, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 }

@@ -1,86 +1,56 @@
-/**
- * \brief Provides error reporting functions
- * \author Julian Martinez del Campo <mdcja@outlook.com>
- * \page error Error Handler
+/* Author: Julian Martinez del Campo
  *
- * \section license GNU LGPLv3
+ * This file provides basic error types, a variable to keep track of errors, as
+ * well as error printing functions. This file was inspired and is very similar
+ * to the role of errno.h.
  *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- *
- * \section error_intro Introduction
- *
- * This file provides a list of errors that may occur during execution.
- *
- * \section error_usage Usage
- *
- * The global variable error_code contains the current error state. It must be
- * initialized by the programmer.
- *
- * If an error occurs, then error_code is set, and can be checked against
- * expected behavior.
+ * The _EMBEDDED macro can be defined to exclude all functions that use stdio.h
+ * to print messages, which is useful if programming on an embedded system.
  */
 #ifndef _ERROR_H_
 #define _ERROR_H_
 
+#ifndef _EMBEDDED
 #include <stdio.h>
+#endif /* _EMBEDDED */
 
-/**
- * The types of errors that may occur
+/* Error types
  */
-typedef enum Errors {
-    ERROR_NO_ERROR = 0,
-    ERROR_UNKNOWN = 1,
-    ERROR_MEMORY_ALLOCATION_FAILED,
-    ERROR_NULL_PARAMETER,
-    ERROR_NOT_FOUND,
-    ERROR_INVALID_CAPACITY,
-    ERROR_NOT_IMPLEMENTED,
-    ERROR_OVERFLOW,
-    ERROR_UNDERFLOW
+typedef enum _errors {
+    E_UNKNOWN = -1,
+    E_NO_ERROR = 0,
+    E_MEMORY_ALLOCATION_FAILED,
+    E_NULL_PARAMETER,
+    E_NOT_FOUND,
+    E_INVALID_CAPACITY,
+    E_NOT_IMPLEMENTED,
+    E_OVERFLOW,
+    E_UNDERFLOW
 } error_t;
 
-/**
- * The global error code that is used to get error code from
- *
- * \warning error code is not initialized automatically.
+/* This variable is used by the programmer to set errors (much like errno).
  */
 error_t error_code;
 
-/**
- * Get error message
- *
- * \param error_code the error number.
- * \return a null terminated string containing the error message.
+#ifndef _EMBEDDED
+/* Get the error message associated with the error. This function returns a
+ * null terminated character array with the error message.
  */
-char * error_get_message( int error );
+char * error_get_message( error_t error );
 
-/**
- * Print an error message.
- *
- * \post Error message is printed to stderr.
- * \param msg an error message.
- * \return The number of characters printed to screen, else return -1 on error.
+/* Print an error message to stdout. The message printed is a combination of
+ * the error message associated with the error, and an additional custom
+ * message provided as input. This function returns the number of characters
+ * printed, else -1 to indicate an error.
  */
-int error_print( const char * msg );
+int error_print( const char * message );
 
-/**
- * Print an error message to a stream.
- *
- * \post Error message is printed to fp.
- * \param fp a stream to print message to.
- * \param msg a message to print.
- * \return The number of characters printed to stream, else return -1 on error.
+/* Print an error message to a file. The message printed is a combination of
+ * the error message associated with the error, and an additional custom
+ * message provided as input. This function returns the number of characters
+ * printed, else -1 to indicate an error.
  */
-int error_print_message( FILE * fp, char * msg );
+int error_print_message( FILE * fp, char * message );
+#endif /* _EMBEDDED */
 
 #endif /* _ERROR_H_ */

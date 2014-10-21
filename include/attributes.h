@@ -1,129 +1,88 @@
-/**
- * \brief Provides data attributes.
- * \author Julian Martinez del Campo
- * \copyright Julian Martinez del Campo, 2014
- * \page attributes Attributes
+/* Author: Julian Martinez del Campo
  *
- * \section license LGPLv3
+ * This file provides data attributes for abstract data types. The goal of
+ * having attributes is to allow data structures to also contain the
+ * information needed to manipulate (allocate, free, copy, hash, print) data of
+ * any type. The programmer configures the attributes for a data type, e.g. a
+ * string, and the data structure is able to manipulate strings (in a basic
+ * sense).
  *
- * This file is part of Prometheus.
+ * All of the functions set error_code defined in error.h for more detiled
+ * error reporting.
  *
- * Prometheus is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option)
- * any later version.
- *
- * Prometheus is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Prometheus.  If not, see <http://www.gnu.org/licenses/>.
- *
- * \section attributes_intro Introduction
- *
- * The data attributes are used to manipulate the data stored in the abstract
- * data types. By changing the attributes, data can be dealt with in a more
- * controlled way; i.e. printing or copying a string.
+ * If the _EMBEDDED macro is enabled then functions requiring stdio.h are
+ * disabled. This may be useful when programming on embedded systems.
  */
 #ifndef _ATTRIBUTES_H_
 #define _ATTRIBUTES_H_
 
+#ifndef _EMBEDDED
 #include <stdio.h>
+#endif /* _EMBEDDED */
 
-/**
- * Data attributes.
- *
- * This structure holds the attributes that are commonly used when dealing with
- * data.
+/* Contains function pointers for all basic data operations
  */
-struct _data_attributes_type {
-    int (*compare)( const void *, const void * );
-    int (*print)( const void *, FILE * );
-    void * (*copy)( const void * );
-    void (*free)( void * );
-    unsigned long (*hash)( const void * );
-};
+typedef struct _data_attributes_type {
+    /* The comparator. This function compares data A with data B, if A is
+     * greater than B, A is equals to B, or if A is less than B return 1, 0,
+     * and -1, respectively.
+     */
+    int             (*compare)  ( const void *, const void * );
 
-typedef struct _data_attributes_type attr_t;
+#ifndef _EMBEDDED
+    /* Print data. This function prints the data passed to it, to the
+     * associated file pointer. It returns the number of characters printed.
+     */
+    int             (*print)    ( const void *, FILE * );
+#endif /* _EMBEDDED */
 
-/**
- * Initialize attributes.
- *
- * This function initializes a data attributes structure. By default the
- * attributes manipulate pointer values.
- * 
- * \post If an error occurs then error_code is set (see error.h).
- * \post The all data attributes are initialized to default values, and is safe
- * to use in a data structure.  
- * \param attr the attributes to initialize.
- * \return 0 on success, return -1 on error.
+    /* Copy data. This function allocates (if necessary) and copies data. It
+     * should return a pointer to the new copied data.
+     */
+    void *          (*copy)     ( const void * );
+
+    /* Free data. This function deallocates (if necessary) data.
+     */
+    void            (*free)     ( void * );
+
+    /* Hash data. This function hashes the data passed to it. It can support
+     * arrays by specifying the length of the array, if the data is not an
+     * array then this parameter can be ignored.
+     */
+    unsigned long   (*hash)     ( const void *, unsigned int );
+} attr_t;
+
+/* Initialize attributes. It assigns default function pointers to the
+ * attributes structure that are safe to use with any data type (it deals with
+ * pointer values). It returns 0 on success, and returns -1 on error.
  */
 int attr_init( attr_t * attr );
 
-/**
- * Set the compare function.
- *
- * This function sets the data comparison function. The data comparator takes
- * two parameters, data A and data B. It then returns -1,0,1 if A is less than,
- * equal to, or greater than B.
- *
- * \post If an error occurs, then error_code is set (see error.h).
- * \param attr the attributes to set.
- * \param data_compare the comparator function.
- * \return 0 on success, return -1 on error.
+/* Set the comparator. It assigns the comparator to the attributes data
+ * structure. It returns 0 on success, and returns -1 on error.
  */
 int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const void * ) );
 
-/**
- * Set the print function.
- *
- * This function sets the data print function. The data print function takes
- * two parameters, data, and a file pointer to print to. It then returns the
- * number of characters printed to the stream, or -1 if an error occurred.
- *
- * \param attr the attributes to set.
- * \param data_print the data print function.
- * \return 0 on success, return -1 on error.
+#ifndef _EMBEDDED
+/* Set the print function. It assigns the printing function to the attributes
+ * data structure. It returns 0 on success, and returns -1 on error.
  */
 int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) );
+#endif /* _EMBEDDED */
 
-/**
- * Set the copy function.
- *
- * This function sets the data copy function. The copy function takes one
- * parameter, data, and it then returns a pointer to a copy of the data.
- *
- * \param attr the attributes to set.
- * \param data_copy the data copy function.
- * \return 0 on success, return -1 on error.
+/* Set the copy function. It assigns the copy function to the attributes
+ * structure. It returns 0 on success, and returns -1 on error.
  */
 int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) );
 
-/**
- * Set the free function.
- *
- * This function sets the data free function. The free function takes one
- * parameter, data, and it then deallocates it from memory.
- *
- * \param attr the attributes to set.
- * \param data_free the data deallocation function.
- * \return 0 on success, return -1 on error.
+/* Set the free function. It assigns the free function to the attributes
+ * structure. It returns 0 on success, and returns -1 on error.
  */
 int attr_set_free( attr_t * attr, void (*data_free)( void * ) );
 
-/**
- * Set the hash function.
- *
- * This function sets the data hash function. The hash function takes one
- * parameter, data, and it then hashes the data and returns the hashed value as
- * an unsigned long integer.
- *
- * \param attr the attributes to set.
- * \param data_hash the data hash function.
- * \param 0 on success, return -1 on error.
+/* Set the hash function. It assigns the hashing function to the attributes
+ * structure. It returns 0 on success, and returns -1 on error.
  */
-int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ) );
+int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void *, unsigned int ) );
 
 #endif /* _ATTRIBUTES_H_ */

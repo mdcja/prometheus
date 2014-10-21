@@ -1,46 +1,17 @@
-/**
- * \brief Provides an implementation of data attributes.
- * \author Julian Martinez del Campo <mdcja@outlook.com>
- * \page attributes_implementation Attributes Implementation
+/* author: Julian Martinez del Campo
  *
- * \section license GNU LGPLv3 License
+ * This file implementes attributes.h
  *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * \section attributes_details Details
- *
- * This file provides an implementation of the data attributes. This file also
- * provides the default data functions.
+ * If _VERBOSE > 0 then display error messages.
  */
-#include <stdlib.h>
+#ifndef _EMBEDDED
 #include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#endif /* _EMBEDDED */
 
 #include "attributes.h"
 #include "error.h"
 
-/**
- * Default data comparison function.
- *
- * This function numerically compares the locations pointed to by data1 and
- * data2.
- *
- * \param data1 an object to compare.
- * \param data2 another object to compare.
- * \return -1, 0, 1 if data1 is less than, equal to, or greater than data2.
- *  equal to, or greater than each other.
+/* Compare pointers
  */
 static int default_compare( const void * data1, const void * data2 )
 {
@@ -58,56 +29,32 @@ static int default_compare( const void * data1, const void * data2 )
     }
 }
 
-
-/**
- * Default data printing function.
- *
- * This function prints the memory location pointed to by data.
- *
- * \param fp the file to print to.
- * \param data the data to print.
- * \return the number of characters printed to the file, return -1 on error.
+#ifndef _EMBEDDED
+/* Print a pointer
  */
 static int default_print( const void * data, FILE * fp )
 {
     return fprintf( fp, "%p", data );
 }
+#endif /* _EMBEDDED */
 
-/**
- * Default data copy function.
- *
- * This function returns the memory location pointed to by data.
- *
- * \post the address of data is returned, not a copy.
- * \param data the data to copy.
- * \return the address of data.
+/* Dont copy anything, return a pointer to the object
  */
 static void * default_copy( const void * data )
 {
     return (void *)data;
 }
 
-/**
- * Default free data function.
- *
- * This function does nothing.
- *
- * \post the data is still in memory.
- * \param data to free.
+/* Dont do anyting
  */
 static void default_free( void * data )
 {
     return;
 }
 
-/**
- * Integer hash key
- *
- * CRC variant hash
- *
- * \see http://www.cs.hmc.edu/~geoff/classes/hmc.cs070.200101/homework10/hashfuncs.html
+/* CRC hash variant
  */
-static unsigned long default_hash( const void * key )
+static unsigned long default_hash( const void * key, unsigned int n )
 {
     unsigned long hash = *(int*)key;
     unsigned long high_order = 0;
@@ -120,52 +67,54 @@ static unsigned long default_hash( const void * key )
     return hash;
 }
 
-/**
- * Initialize attributes.
- *
- * \post All functions are initialized to the default values.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
 int attr_init( attr_t * attr )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_init: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+    /* set functions */
     attr->compare = default_compare;
-    attr->print = default_print;
     attr->copy = default_copy;
     attr->free = default_free;
     attr->hash = default_hash;
+#ifndef _EMBEDDED
+    attr->print = default_print;
+#endif /* _EMBEDDED */
             
     return 0;
 }
 
-/**
- * Set the compare function.
- *
- * \post The data compare function is set.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- * \post If data_compare is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
 int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const void *) )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_compare: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( data_compare == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_compare: data_compare" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -175,27 +124,28 @@ int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const vo
     return 0;
 }
 
-/**
- * Set the print function.
- *
- * \post The data print function is set.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- * \post If data_print is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
 int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_print: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
         
         return -1;
     }
 
     if( data_print == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_print: data_print" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -205,27 +155,28 @@ int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) )
     return 0;
 }
 
-/**
- * Set the copy function.
- *
- * \post The data copy function is set.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- * \post If data_copy is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
 int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_copy: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( data_copy == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_copy: data_copy" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -235,27 +186,28 @@ int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) )
     return 0;
 }
 
-/**
- * Set the free function.
- *
- * \post The data free function is set.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- * \post If data_free is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
 int attr_set_free( attr_t * attr, void (*data_free)( void * ) )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_free: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( data_free == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_free: data_free" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -265,27 +217,28 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) )
     return 0;
 }
 
-/**
- * Set the hash function.
- *
- * \post The data hash function is set.
- * \post If attr is NULL then error_code is set to ERROR_NULL_PARAMETER.
- * \post If data_hash is NULL then error_code is set to ERROR_NULL_PARAMETER.
- */
-int attr_set_hash( attr_t * attr, unsigned long (*data_hash)(const void *) )
+int attr_set_hash( attr_t * attr, unsigned long (*data_hash)(const void *, unsigned int ) )
 {
     if( attr == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_hash: attr" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( data_hash == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
         error_print( "attr_set_hash: data_hash" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
