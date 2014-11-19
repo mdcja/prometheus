@@ -27,29 +27,27 @@ typedef struct _data_attributes_type {
      * greater than B, A is equals to B, or if A is less than B return 1, 0,
      * and -1, respectively.
      */
-    int             (*compare)  ( const void *, const void * );
+    int (*compare)( const void *, const void * );
 
 #ifndef _EMBEDDED
     /* Print data. This function prints the data passed to it, to the
      * associated file pointer. It returns the number of characters printed.
      */
-    int             (*print)    ( const void *, FILE * );
+    int (*print)( const void *, FILE * );
 #endif /* _EMBEDDED */
 
     /* Copy data. This function allocates (if necessary) and copies data. It
      * should return a pointer to the new copied data.
      */
-    void *          (*copy)     ( const void * );
+    void * (*copy)( const void * );
 
     /* Free data. This function deallocates (if necessary) data.
      */
-    void            (*free)     ( void * );
+    void (*free)( void * );
 
-    /* Hash data. This function hashes the data passed to it. It can support
-     * arrays by specifying the length of the array, if the data is not an
-     * array then this parameter can be ignored.
+    /* Hash data. This function hashes the data passed to it.
      */
-    unsigned long   (*hash)     ( const void *, unsigned int );
+    unsigned long (*hash)( const void * );
 } attr_t;
 
 /* Initialize attributes. It assigns default function pointers to the
@@ -83,6 +81,6 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) );
 /* Set the hash function. It assigns the hashing function to the attributes
  * structure. It returns 0 on success, and returns -1 on error.
  */
-int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void *, unsigned int ) );
+int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ) );
 
 #endif /* _ATTRIBUTES_H_ */

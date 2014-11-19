@@ -58,7 +58,7 @@ queue_t * queue_create( const attr_t * attr, int capacity )
     /* check */
     if( capacity <= 0 )
     {
-        error_code = ERROR_INVALID_CAPACITY;
+        error_code = E_INVALID_CAPACITY;
         error_print( "queue_create" );
 
         return NULL;
@@ -69,7 +69,7 @@ queue_t * queue_create( const attr_t * attr, int capacity )
     assert( new_queue );
     if( !new_queue )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
+        error_code = E_MEMORY_ALLOCATION_FAILED;
         error_print( "queue_create" );
 
         return NULL;
@@ -79,7 +79,7 @@ queue_t * queue_create( const attr_t * attr, int capacity )
     assert( new_queue->queue );
     if( !new_queue->queue )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
+        error_code = E_MEMORY_ALLOCATION_FAILED;
         error_print( "queue_create" );
 
         return NULL;
@@ -117,7 +117,7 @@ int queue_destroy( queue_t ** queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_destroy" );
 
         return -1;
@@ -125,7 +125,7 @@ int queue_destroy( queue_t ** queue )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_destroy" );
 
         return -1;
@@ -162,7 +162,7 @@ int queue_reserve( queue_t ** queue, int capacity )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_reserve" );
 
         return -1;
@@ -170,7 +170,7 @@ int queue_reserve( queue_t ** queue, int capacity )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_reserve" );
 
         return -1;
@@ -178,7 +178,7 @@ int queue_reserve( queue_t ** queue, int capacity )
 
     if( capacity <= (*queue)->count )
     {
-        error_code = ERROR_INVALID_CAPACITY;
+        error_code = E_INVALID_CAPACITY;
         error_print( "queue_reserve" );
 
         return -1;
@@ -189,7 +189,7 @@ int queue_reserve( queue_t ** queue, int capacity )
     assert( new_queue );
     if( !new_queue )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
+        error_code = E_MEMORY_ALLOCATION_FAILED;
         error_print( "queue_reserve" );
     }
 
@@ -224,7 +224,7 @@ int queue_clear( queue_t ** queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_clear" );
 
         return -1;
@@ -232,7 +232,7 @@ int queue_clear( queue_t ** queue )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_clear" );
 
         return -1;
@@ -261,7 +261,7 @@ inline void * queue_peek( const queue_t * queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_peek" );
 
         return NULL;
@@ -283,7 +283,7 @@ int queue_contains( const queue_t * queue, const void * data )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_contains" );
 
         return -1;
@@ -311,7 +311,7 @@ int queue_insert( queue_t ** queue, void * data )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_insert" );
 
         return -1;
@@ -319,7 +319,7 @@ int queue_insert( queue_t ** queue, void * data )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_insert" );
 
         return -1;
@@ -327,7 +327,7 @@ int queue_insert( queue_t ** queue, void * data )
 
     if( !data )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_insert" );
 
         return -1;
@@ -335,7 +335,7 @@ int queue_insert( queue_t ** queue, void * data )
 
     if( (*queue)->count >= (*queue)->capacity )
     {
-        error_code = ERROR_OVERFLOW;
+        error_code = E_OVERFLOW;
         error_print( "queue_insert" );
 
         return -1;
@@ -372,7 +372,7 @@ int queue_remove( queue_t ** queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_remove" );
 
         return -1;
@@ -380,7 +380,7 @@ int queue_remove( queue_t ** queue )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_remove" );
 
         return -1;
@@ -388,7 +388,7 @@ int queue_remove( queue_t ** queue )
 
     if( (*queue)->count <= 0 )
     {
-        error_code = ERROR_UNDERFLOW;
+        error_code = E_UNDERFLOW;
         error_print( "queue_remove" );
 
         return -1;
@@ -434,7 +434,7 @@ int queue_remove_item( queue_t ** queue, void * data )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_remove_item" );
 
         return -1;
@@ -442,7 +442,7 @@ int queue_remove_item( queue_t ** queue, void * data )
 
     if( !*queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_remove_item" );
 
         return -1;
@@ -450,7 +450,7 @@ int queue_remove_item( queue_t ** queue, void * data )
 
     if( !data )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_remove_item" );
 
         return -1;
@@ -481,7 +481,7 @@ int queue_remove_item( queue_t ** queue, void * data )
         }
     }
 
-    error_code = ERROR_NOT_FOUND;
+    error_code = E_NOT_FOUND;
     error_print( "queue_remove_item" );
 
     return -1;
@@ -501,7 +501,7 @@ int queue_print( const queue_t * queue, FILE * fp )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_print" );
 
         return -1;
@@ -509,7 +509,7 @@ int queue_print( const queue_t * queue, FILE * fp )
 
     if( !fp )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_print" );
 
         return -1;
@@ -540,7 +540,7 @@ inline int queue_memory( const queue_t * queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_memory" );
 
         return -1;
@@ -559,7 +559,7 @@ inline int queue_count( const queue_t * queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_count" );
 
         return -1;
@@ -578,7 +578,7 @@ inline int queue_capacity( const queue_t * queue )
     /* check */
     if( !queue )
     {
-        error_code = ERROR_NULL_PARAMETER;
+        error_code = E_NULL_PARAMETER;
         error_print( "queue_capacity" );
 
         return -1;

@@ -1,56 +1,37 @@
-/**
- * This file provides an implementation of a queue using a circular array data
- * structure.
+/* Author: Julian Martinez del Campo
  *
- * \brief Provide a queue implemented using a circular array.
- * \author Julian Martinez del Campo
- * \license GNU Lesser General Public License (LGPL) https://www.gnu.org/copyleft/lesser.html
+ * This file implements queue.h using a circular array.
  *
- * The memory complexity of this queue is O(1).
- * 
- * This implementation provides the following run time complexity for a queue
- * with n elements:
+ * If _EMBEDDED macro is defined then all functions depending on stdio.h are
+ * disabled. This may be useful when programming on embedded systems.
  *
- * Operation    | Efficiency
- * -------------|-----------
- * create       | O(1)
- * destroy      | O(n)
- * contains     | O(n)
- * peek         | O(1)
- * insert/push  | O(1)
- * remove/pop   | O(1)
- * count        | O(1)
- * memory       | O(1)
- * capacity     | O(1)
- * print        | O(n)
- * clear        | O(n)
- * reserve      | O(n)
- * remove item  | O(n)
+ * If _VERBOSE > 0 macro is defined then error messages will be printed by the
+ * functions.
  */
 #include <stdlib.h>
+#ifndef _EMBEDDED
 #include <stdio.h>
 #include <assert.h>
+#else
+#include <string.h>
+#endif /* _EMBEDDED */
 
 #include "queue.h"
 #include "error.h"
 #include "attributes.h"
 
-/**
- * A queue with a circular buffer data structure
+/* A queue with a circular buffer data structure
  */
 struct _queue_type {
-    void ** queue;
-    int head;
-    int tail;
-    int capacity;
-    int count;
-    int memory;
-    attr_t attr;
+    void ** queue;  /* the actual queue */
+    int head;       /* index of first item */
+    int tail;       /* index of the last item */
+    int capacity;   
+    int count;      /* the number of items in the queue */
+    int memory;     /* memory used by the queue */
+    attr_t attr;    /* data attributes */
 };
 
-/**
- * Create a new queue.
- */
 queue_t * queue_create( const attr_t * attr, int capacity )
 {
     queue_t * new_queue = NULL;
@@ -58,29 +39,47 @@ queue_t * queue_create( const attr_t * attr, int capacity )
     /* check */
     if( capacity < 1 )
     {
-        error_code = ERROR_INVALID_CAPACITY;
-        error_print( "queue_create" );
+        error_code = E_INVALID_CAPACITY;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_create: capacity" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return NULL;
     }
 
     /* create */
     new_queue = (queue_t *)calloc( 1, sizeof( queue_t ) );
-    assert( new_queue );
-    if( !new_queue )
+    if( new_queue == NULL )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
-        error_print( "queue_create" );
+        error_code = E_MEMORY_ALLOCATION_FAILED;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_create: new_queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return NULL;
     }
     
+#ifndef _EMBEDDED
     new_queue->queue = (void **)calloc( capacity, sizeof( void * ) );
-    assert( new_queue->queue );
-    if( !new_queue )
+#else
+    new_queue->queue = (void **)malloc( capacity * sizeof( void * ) );
+    memset( new_queue->queue, 0, capacity * sizeof( void * ) );
+#endif /* _EMBEDDED */
+    if( new_queue->queue == NULL )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
-        error_print( "queue_create" );
+        error_code = E_MEMORY_ALLOCATION_FAILED;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_create: new_queue->queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return NULL;
     }
@@ -100,34 +99,41 @@ queue_t * queue_create( const attr_t * attr, int capacity )
         attr_init( &new_queue->attr );
     }
 
+#ifndef _EMBEDDED
     assert( new_queue->attr.copy );
     assert( new_queue->attr.free );
     assert( new_queue->attr.compare );
     assert( new_queue->attr.print );
+#endif /* _EMBEDDED */
 
     return new_queue;
 }
 
-/**
- * Destroy a queue.
- *
- * Deallocate all items in the queue, then deallocate the queue itself.
- */
 int queue_destroy( queue_t ** queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_destroy" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_destroy: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_destroy" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_destroy: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -148,12 +154,6 @@ int queue_destroy( queue_t ** queue )
     return 0;
 }
 
-/**
- * Resize the queue.
- *
- * Create a new array of the desired capacity, then copy items over and
- * deallocate the old array.
- */
 int queue_reserve( queue_t ** queue, int capacity )
 {
     void ** new_queue = NULL;
@@ -162,37 +162,56 @@ int queue_reserve( queue_t ** queue, int capacity )
     int j = 0;
 
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_reserve" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_reserve: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_reserve" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_reserve: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( capacity < (*queue)->count )
     {
-        error_code = ERROR_INVALID_CAPACITY;
-        error_print( "queue_reserve" );
+        error_code = E_INVALID_CAPACITY;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_reserve: capacity" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     /* create */
     new_queue = (void **)calloc( capacity, sizeof( void * ) );
-    assert( new_queue );
     if( !new_queue )
     {
-        error_code = ERROR_MEMORY_ALLOCATION_FAILED;
-        error_print( "queue_reserve" );
+        error_code = E_MEMORY_ALLOCATION_FAILED;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_reserve: new_queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
@@ -218,33 +237,40 @@ int queue_reserve( queue_t ** queue, int capacity )
     return 0;
 }
 
-/**
- * Clear all data from the queue.
- *
- * Deallocate all items in the queue.
- */
 int queue_clear( queue_t ** queue )
 {
     int i = 0;
 
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_clear" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_clear: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_clear" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_clear: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( (*queue)->attr.free );
+#endif /* _EMBEDDED */
 
     /* clear all items */
     for( i = (*queue)->head; (*queue)->count > 0; ++i )
@@ -257,21 +283,25 @@ int queue_clear( queue_t ** queue )
     (*queue)->head = 0;
     (*queue)->tail = 0;
 
+#ifndef _EMBEDDED
     assert( (*queue)->count == 0 );
+#endif /* _EMBEDDED */
 
     return 0;
 }
 
-/**
- * Get data at the front of the queue.
- */
-inline void * queue_peek( const queue_t * queue )
+void * queue_peek( const queue_t * queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_peek" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_peek: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return NULL;
     }
@@ -279,34 +309,41 @@ inline void * queue_peek( const queue_t * queue )
     return queue->count ? queue->queue[ queue->head ] : NULL;
 }
 
-/**
- * Check if queue contains data.
- *
- * Go through all items in the queue and compare against given data.
- */
 int queue_contains( const queue_t * queue, const void * data )
 {
     int i = 0;
     int j = 0;
 
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_contains" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_contains: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !data )
+    if( data == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_contains" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_contains: data" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( queue->attr.compare );
+#endif /* _EMBEDDED */
 
     /* look for data */
     for( i = queue->head, j = 0; j < queue->count; ++i, ++j )
@@ -320,47 +357,64 @@ int queue_contains( const queue_t * queue, const void * data )
     return 0;
 }
 
-/**
- * Insert data into the queue.
- *
- * Insert an item at the front of the queue.
- */
 int queue_insert( queue_t ** queue, void * data )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_insert" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_insert: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_insert" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_insert: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !data )
+    if( data == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_insert" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_insert: data" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( (*queue)->count >= (*queue)->capacity )
     {
-        error_code = ERROR_OVERFLOW;
-        error_print( "queue_insert" );
+        error_code = E_OVERFLOW;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_insert: count" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( (*queue)->attr.copy );
+#endif /* _EMBEDDED */
 
     /* insert item */
     if( (*queue)->count == 0 )
@@ -375,52 +429,58 @@ int queue_insert( queue_t ** queue, void * data )
     }
     (*queue)->count++;
 
+#ifndef _EMBEDDED
     assert( (*queue)->count <= (*queue)->capacity );
+#endif /* _EMBEDDED */
 
     return 0;
 }
 
-/**
- * Push data into the queue.
- *
- * This function is an alias for queue_insert.
- */
-inline int queue_push( queue_t ** queue, void * data )
-{
-    return queue_insert( queue, data );
-}
-
-/**
- * Remove data from the queue.
- */
 int queue_remove( queue_t ** queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_remove" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_remove" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
     if( (*queue)->count <= 0 )
     {
-        error_code = ERROR_UNDERFLOW;
-        error_print( "queue_remove" );
+        error_code = E_UNDERFLOW;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove: count" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( (*queue)->attr.free );
+#endif /* _EMBEDDED */
 
     /* remove */
     (*queue)->attr.free( (*queue)->queue[ (*queue)->head ] );
@@ -429,58 +489,62 @@ int queue_remove( queue_t ** queue )
     (*queue)->head = ((*queue)->head + 1) % (*queue)->capacity;
     (*queue)->count--;
 
+#ifndef _EMBEDDED
     assert( (*queue)->count >= 0 );
+#endif /* _EMBEDDED */
 
     return 0;
 }
 
-/**
- * Pop data from the queue.
- *
- * This function is an alias for queue_remove.
- */
-inline int queue_pop( queue_t ** queue )
-{
-    return queue_remove( queue );
-}
-
-/**
- * Remove data from the queue.
- *
- * Look for the item in the queue and then deallocate it.
- */
 int queue_remove_item( queue_t ** queue, void * data )
 {
     int i = 0;
     int j = 0;
 
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_remove_item" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove_item: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !*queue )
+    if( *queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_remove_item" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove_item: *queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
-    if( !data )
+    if( data == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_remove_item" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_remove_item: data" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( (*queue)->attr.compare );
     assert( (*queue)->attr.free );
+#endif /* _EMBEDDED */
 
     /* look for data */
     for( i = (*queue)->head, j = 0; j < (*queue)->count; ++i, ++j )
@@ -507,21 +571,26 @@ int queue_remove_item( queue_t ** queue, void * data )
                 (*queue)->tail--;
             }
 
+#ifndef _EMBEDDED
             assert( (*queue)->count >= 0 );
+#endif /* _EMBEDDED */
 
             return 0;
         }
     }
 
-    error_code = ERROR_NOT_FOUND;
+    error_code = E_NOT_FOUND;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
     error_print( "queue_remove_item" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
     return -1;
 }
 
-/**
- * Print a queue.
- */
+#ifndef _EMBEDDED
 int queue_print( const queue_t * queue, FILE * fp )
 {
     int i = 0;
@@ -529,18 +598,24 @@ int queue_print( const queue_t * queue, FILE * fp )
     int nchr = 0;
 
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_print" );
+        error_code = E_NULL_PARAMETER;
+
+#if _VERBOSE > 0
+        error_print( "queue_print: queue" );
+#endif /* _VERBOSE */
 
         return -1;
     }
 
-    if( !fp )
+    if( fp == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_print" );
+        error_code = E_NULL_PARAMETER;
+
+#if _VERBOSE > 0
+        error_print( "queue_print: fp" );
+#endif /* _VERBOSE */
 
         return -1;
     }
@@ -561,60 +636,73 @@ int queue_print( const queue_t * queue, FILE * fp )
 
     return nchr;
 }
+#endif /* _EMBEDDED */
 
-/**
- * Get the memory usage of the queue.
- */
 int queue_memory( const queue_t * queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_memory" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_memory: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( queue->memory > 0 );
+#endif /* _EMBEDDED */
 
     return queue->memory;
 }
 
-/**
- * Get the number of items in the queue.
- */
 int queue_count( const queue_t * queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_count" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_count: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( queue->count >= 0 );
+#endif /* _EMBEDDED */
 
     return queue->count;
 }
 
-/**
- * Get the capacity of the queue.
- */
 int queue_capacity( const queue_t * queue )
 {
     /* check */
-    if( !queue )
+    if( queue == NULL )
     {
-        error_code = ERROR_NULL_PARAMETER;
-        error_print( "queue_capacity" );
+        error_code = E_NULL_PARAMETER;
+
+#ifndef _EMBEDDED
+#if _VERBOSE > 0
+        error_print( "queue_capacity: queue" );
+#endif /* _VERBOSE */
+#endif /* _EMBEDDED */
 
         return -1;
     }
 
+#ifndef _EMBEDDED
     assert( queue->capacity > 0 );
+#endif /* _EMBEDDED */
 
     return queue->capacity;
 }

@@ -5,7 +5,7 @@
 ###########################################################
 
 CC=gcc
-CFLAGS=-Wall -g -pedantic -std=c99 -I include
+CFLAGS=-Wall -g -pedantic -std=c99 -I include -D_VERBOSE
 LDFLAGS= -lcheck
 vpath %.c tests
 vpath %.c src
@@ -15,7 +15,7 @@ ERROR=error.o error_test
 MATH=math.o math_test
 ATTRIBUTES=attributes.o attributes_test
 STACK=stack_array.o stack_linked_list.o stack_array_test stack_linked_list_test
-QUEUE=queue_array.o queue_linked_list.o queue_circular_array.o queue_array_test queue_linked_list_test queue_circular_array_test
+QUEUE=queue_array.o queue_linked_list.o queue_circular_array.o queue_linked_list_test queue_linked_list_integration_test queue_circular_array_test queue_circular_array_integration_test 
 DEQUEUE=dequeue_array.o dequeue_circular_array.o dequeue_doubly_linked_list.o dequeue_array_test dequeue_circular_array_test dequeue_doubly_linked_list_test
 HASH_TABLE=hash_table_open_addressing.o hash_table_seperate_chaining.o hash_table_open_addressing_test hash_table_seperate_chaining_test
 
@@ -117,14 +117,29 @@ stack_linked_list_test: stack_test.o stack_linked_list.o attributes.o error.o
 queue_test.o: tests/queue_test.c include/queue.h include/attributes.h include/error.h
 	$(CC) $(CFLAGS) -c $<
 
-queue_array_test: queue_test.o queue_array.o attributes.o error.o
+queue_array_integration_test: queue_test.o queue_array.o attributes.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-queue_linked_list_test: queue_test.o queue_linked_list.o attributes.o error.o
+queue_linked_list_integration_test: queue_test.o queue_linked_list.o attributes.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-queue_circular_array_test: queue_test.o queue_circular_array.o attributes.o error.o
+queue_circular_array_integration_test: queue_test.o queue_circular_array.o attributes.o error.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+
+queue_circular_array_test.o: tests/queue_circular_array_test.c include/queue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+queue_circular_array_test: queue_circular_array_test.o queue_circular_array.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+queue_linked_list_test.o: tests/queue_linked_list_test.c include/queue.h include/attributes.h include/error.h
+	$(CC) $(CFLAGS) -c $<
+
+queue_linked_list_test: queue_linked_list_test.o queue_linked_list.o attributes.o error.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+
 
 # Dequeue tests
 dequeue_test.o: tests/dequeue_test.c include/dequeue.h include/attributes.h include/error.h

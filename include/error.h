@@ -17,8 +17,8 @@
 /* Error types
  */
 typedef enum _errors {
-    E_UNKNOWN = -1,
-    E_NO_ERROR = 0,
+    E_UNKNOWN = 0,
+    E_NO_ERROR,
     E_MEMORY_ALLOCATION_FAILED,
     E_NULL_PARAMETER,
     E_NOT_FOUND,
