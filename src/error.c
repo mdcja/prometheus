@@ -61,6 +61,7 @@ static char * error_name( error_t error )
         error_name = error_names[ E_UNDERFLOW ];
         break;
 
+    case E_UNKNOWN:
     default:
         error_name = error_names[ E_UNKNOWN ];
         break;
@@ -79,6 +80,12 @@ inline char * error_get_message( error_t error )
  */
 int error_print( const char * msg )
 {
+    if( msg == NULL )
+    {
+        error_code = E_NULL_PARAMETER;
+        return -1;
+    }
+
     return printf( "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 }
 
@@ -87,5 +94,17 @@ int error_print( const char * msg )
  */
 int error_print_message( FILE * fp, char * msg )
 {
+    if( fp == NULL )
+    {
+        error_code = E_NULL_PARAMETER;
+        return -1;
+    }
+
+    if( msg == NULL )
+    {
+        error_code = E_NULL_PARAMETER;
+        return -1;
+    }
+
     return fprintf( fp, "ERROR: (%d) %s : %s\n", error_code, error_name( error_code), msg );
 }

@@ -135,15 +135,7 @@ START_TEST( test_num_digits100 )
 }
 END_TEST
 
-/**
- * Test the number of expected characters
- */
-START_TEST( test_get_expected_chars )
-{
-    int nchar = -1;
-}
-END_TEST
-
+#ifndef _EMBEDDED
 /* This test gets the message given the error code is E_NO_ERROR.
  */
 START_TEST( test_error_get_message_no_error )
@@ -499,12 +491,7 @@ START_TEST( test_error_print_greaterthan )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_NO_ERROR is checked.
+/* This test prints an error message to stdout given that E_NO_ERROR occurred.
  */
 START_TEST( test_error_print_message_no_error )
 {
@@ -524,12 +511,7 @@ START_TEST( test_error_print_message_no_error )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_UNKNOWN is checked.
+/* This test prints an error message to stdout given that E_UNKNOWN is set.
  */
 START_TEST( test_error_print_message_unknown )
 {
@@ -549,12 +531,8 @@ START_TEST( test_error_print_message_unknown )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_MEMORY_ALLOCATION_FAILED is checked.
+/* This test prints an error message to stdout given that
+ * E_MEMORY_ALLOCATION_FAILED is set.
  */
 START_TEST( test_error_print_message_memory_allocation_failed )
 {
@@ -574,12 +552,8 @@ START_TEST( test_error_print_message_memory_allocation_failed )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_NULL_PARAMETER is checked.
+/* This test prints an error message to stdout given that E_NULL_PARAMETER is
+ * set.
  */
 START_TEST( test_error_print_message_null_parameter )
 {
@@ -599,12 +573,7 @@ START_TEST( test_error_print_message_null_parameter )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_NOT_FOUND is checked.
+/* This test prints an error message to stdout given that E_NOT_FOUND is set.
  */
 START_TEST( test_error_print_message_not_found )
 {
@@ -624,12 +593,8 @@ START_TEST( test_error_print_message_not_found )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_INVALID_CAPACITY is checked.
+/* This test prints an error message to stdout given that E_INVALID_CAPACITY is
+ * set.
  */
 START_TEST( test_error_print_message_invalid_capacity )
 {
@@ -649,12 +614,8 @@ START_TEST( test_error_print_message_invalid_capacity )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_NOT_IMPLEMENTED is checked.
+/* This test prints an error message to stdout given that E_NOT_IMPLEMENTED is
+ * set.
  */
 START_TEST( test_error_print_message_not_implemented )
 {
@@ -674,12 +635,7 @@ START_TEST( test_error_print_message_not_implemented )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_OVERFLOW is checked.
+/* This test prints an error message to stdout given thatn E_OVERFLOW is set.
  */
 START_TEST( test_error_print_message_overflow )
 {
@@ -699,12 +655,7 @@ START_TEST( test_error_print_message_overflow )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing E_UNDERFLOW is checked.
+/* This test prints an error message to stdout given that E_UNDERFLOW is set.
  */
 START_TEST( test_error_print_message_underflow )
 {
@@ -724,12 +675,8 @@ START_TEST( test_error_print_message_underflow )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing error less than 0 is checked.
+/* This test prints an error message to stdout given that the error is negative
+ * and undefined.
  */
 START_TEST( test_error_print_message_lessthan )
 {
@@ -749,12 +696,8 @@ START_TEST( test_error_print_message_lessthan )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Printing an error greather than 9 is checked.
+/* This test prints an error message to stdout given that the error is positive
+ * and undefined.
  */
 START_TEST( test_error_print_message_greaterthan )
 {
@@ -774,12 +717,8 @@ START_TEST( test_error_print_message_greaterthan )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Null message is checked.
+/* This test checks to see that an error is returned when printing an error
+ * message without a message.
  */
 START_TEST( error_test_error_print_null_parameter )
 {
@@ -795,12 +734,8 @@ START_TEST( error_test_error_print_null_parameter )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Null fp is checked.
+/* This test checks to see that an error is returned when printing to a NULL
+ * file pointer.
  */
 START_TEST( error_test_error_print_message_null_fp )
 {
@@ -815,12 +750,8 @@ START_TEST( error_test_error_print_message_null_fp )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Null message is checked.
+/* This test checks to see that an error is returned when printing a NULL file
+ * pointer.
  */
 START_TEST( error_test_error_print_message_null_message )
 {
@@ -835,12 +766,7 @@ START_TEST( error_test_error_print_message_null_message )
 }
 END_TEST
 
-/**
- * Test error print
- *
- * This test prints all error messages to stdout.
- *
- * \post Null parameters are checked.
+/* This test checks to see that an error is returned when both parameters are NULL.
  */
 START_TEST( error_test_error_print_message_null_parameters )
 {
@@ -854,14 +780,16 @@ START_TEST( error_test_error_print_message_null_parameters )
     ck_assert( nchr == -1 );
 }
 END_TEST
+#endif /* _EMBEDDED */
 
-/**
- * Error testing suite
+/* Error testing suite. This defines the different error checking suites and
+ * the tests that will occur in each suite.
  */
 Suite * error_suite( void )
 {
     Suite * s = suite_create( "Error" );;
 
+    /* Helper function tests */
     TCase * tc_helper = tcase_create( "Helper" );
 
     tcase_add_test( tc_helper, test_num_digits_negative1 );
@@ -877,6 +805,7 @@ Suite * error_suite( void )
     /* core tests cases */
     TCase * tc_core = tcase_create( "Core" );
 
+#ifndef _EMBEDDED
     tcase_add_test( tc_core, test_error_get_message_no_error );
     tcase_add_test( tc_core, test_error_get_message_unknown );
     tcase_add_test( tc_core, test_error_get_message_memory_allocation_failed );
@@ -912,6 +841,7 @@ Suite * error_suite( void )
     tcase_add_test( tc_core, test_error_print_message_underflow );
     tcase_add_test( tc_core, test_error_print_message_lessthan );
     tcase_add_test( tc_core, test_error_print_message_greaterthan );
+#endif /* _EMBEDDED */
 
     suite_add_tcase( s, tc_core );
 
@@ -928,10 +858,7 @@ Suite * error_suite( void )
     return s;
 }
 
-/**
- * Error unit tests
- *
- * \post All unit tests specified in the testing suite are performed.
+/* Error unit tests. Run all unit tests as defined in the test suite.
  */
 int main( void )
 {

@@ -54,7 +54,7 @@ static void default_free( void * data )
 
 /* CRC hash variant
  */
-static unsigned long default_hash( const void * key, unsigned int n )
+static unsigned long default_hash( const void * key )
 {
     unsigned long hash = *(int*)key;
     unsigned long high_order = 0;
@@ -72,6 +72,7 @@ int attr_init( attr_t * attr )
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_init: attr" );
@@ -98,6 +99,7 @@ int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const vo
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_compare: attr" );
@@ -110,6 +112,7 @@ int attr_set_compare( attr_t * attr, int (*data_compare)( const void *, const vo
     if( data_compare == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_compare: data_compare" );
@@ -129,6 +132,7 @@ int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) )
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_print: attr" );
@@ -141,6 +145,7 @@ int attr_set_print( attr_t * attr, int (*data_print)( const void *, FILE * ) )
     if( data_print == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_print: data_print" );
@@ -160,6 +165,7 @@ int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) )
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_copy: attr" );
@@ -172,6 +178,7 @@ int attr_set_copy( attr_t * attr, void * (*data_copy)( const void * ) )
     if( data_copy == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_copy: data_copy" );
@@ -191,6 +198,7 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) )
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_free: attr" );
@@ -203,6 +211,7 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) )
     if( data_free == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_free: data_free" );
@@ -217,11 +226,12 @@ int attr_set_free( attr_t * attr, void (*data_free)( void * ) )
     return 0;
 }
 
-int attr_set_hash( attr_t * attr, unsigned long (*data_hash)(const void *, unsigned int ) )
+int attr_set_hash( attr_t * attr, unsigned long (*data_hash)( const void * ) )
 {
     if( attr == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_hash: attr" );
@@ -234,6 +244,7 @@ int attr_set_hash( attr_t * attr, unsigned long (*data_hash)(const void *, unsig
     if( data_hash == NULL )
     {
         error_code = E_NULL_PARAMETER;
+
 #ifndef _EMBEDDED
 #if _VERBOSE > 0
         error_print( "attr_set_hash: data_hash" );
