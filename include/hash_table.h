@@ -9,10 +9,6 @@
 #ifndef _HASH_TABLE_H_
 #define _HASH_TABLE_H_
 
-#ifndef _EMBEDDED
-#include <stdio.h>
-#endif /* _EMBEDDED */
-
 #include "attributes.h"
 
 typedef struct _hash_table_type hash_table_t;
